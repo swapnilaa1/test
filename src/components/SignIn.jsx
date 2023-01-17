@@ -1,9 +1,28 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import { BASE_URL, SIGN_IN } from "../api/apiEndPoints";
-import signInSlice from "../redux/signInSlice";
+import { RequestAPi } from "../api/Request";
+import { getMyTasks } from "../redux/myTasksSlice";
+import signInSlice, { signInUser } from "../redux/signInSlice";
 
 const SignIn = () => {
+  const list = useSelector((state) => state.mytasksReducer);
+  const [obj1, setObj1] = useState({
+    From: 1,
+    To: 10,
+    Title: "",
+    UserId: "",
+    IsArchive: false,
+    UserIds: [],
+    Priority: "",
+    TaskStatus: "",
+    FromDueDate: "",
+    ToDueDate: "",
+    SortByDueDate: "",
+  });
+  const dispatch = useDispatch();
   const [credentials, setCredentials] = useState({
     Username: "",
     Password: "",
@@ -14,10 +33,10 @@ const SignIn = () => {
     setCredentials({ ...credentials, [name]: value });
   };
 
-  console.log("sign in env", process.env.BASE_URL);
+  console.log("sign in env", process.env.REACT_APP_BASE_URL);
 
   const signIn = async () => {
-    const response = await axios.post(process.env.BASE_URL, {
+    const response = await RequestAPi.post(SIGN_IN, {
       Username: "8113899206",
       Password: "12345678",
     });
@@ -26,11 +45,25 @@ const SignIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("singined pressed");
-    signIn();
+    // console.log("singined pressed");
+    // signIn();
+    dispatch(signInUser(credentials));
   };
+  console.log("list ", list);
   console.log("credes", credentials);
-
+  const obj = {
+    From: 1,
+    To: 10,
+    Title: "",
+    UserId: "",
+    IsArchive: false,
+    UserIds: [],
+    Priority: "",
+    TaskStatus: "",
+    FromDueDate: "",
+    ToDueDate: "",
+    SortByDueDate: "",
+  };
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -50,6 +83,7 @@ const SignIn = () => {
         />
         <button type="submit">Submit</button>
       </form>
+      <button onClick={() => dispatch(getMyTasks(obj1))}>My tasks</button>
     </div>
   );
 };

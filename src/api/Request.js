@@ -15,7 +15,7 @@ RequestAPi.interceptors.request.use(
     let token2 = localStorage.getItem("token");
     // console.log("token 2 in config", token2);
     if (!config.headers["Authorization"]) {
-      config.headers["Authorization"] = `Bearer ${token2}`;
+      config.headers["Authorization"] = `Basic ${token2}`;
     }
     // console.log("in config", config);
     return config;
