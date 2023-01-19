@@ -7,7 +7,7 @@ const initialState = {
 };
 
 export const getLeads = createAsyncThunk("mytask/getLeads", (data) => {
-  console.log("data in getleads", data);
+  //console.log("data in getleads", data);
   //return RequestAPi.post(GET_LEADS, data).then((response) => response);
   return RequestAPi.get(`${GET_COMPONY_MEM}?from=${1}&text=&to=${100}`).then(
     (response) => response
@@ -23,12 +23,12 @@ const leadsSlice = createSlice({
       state.isAuth = false;
     });
     builder.addCase(getLeads.fulfilled, (state, action) => {
-      console.log("actiom in get leads succes", action.payload);
+      //console.log("actiom in get leads succes", action.payload);
       const data = action.payload.data.data.TaskList;
       //state.localData = data;
     });
     builder.addCase(getLeads.rejected, (state, action) => {
-      console.log("rejected leads");
+      //console.log("rejected leads");
     });
   },
 });

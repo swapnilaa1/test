@@ -22,15 +22,15 @@ const companyMemberSlice = createSlice({
       state.isAuth = false;
     });
     builder.addCase(getCompMembers.fulfilled, (state, action) => {
-      console.log(
-        "actiom in get company members succes",
-        action.payload.data.data.Members
-      );
+      // console.log(
+      //   "actiom in get company members succes",
+      //   action.payload.data.data.Members
+      // );
       const data = action.payload.data.data.Members;
       state.localCompanyData = data;
     });
     builder.addCase(getCompMembers.rejected, (state, action) => {
-      console.log("rejected company members");
+      //  console.log("rejected company members");
     });
   },
 });

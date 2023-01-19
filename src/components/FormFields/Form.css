@@ -1,0 +1,11 @@
+.display{
+    border: ;
+position:fixed ;
+bottom:20px;
+  z-index: 1;
+ 
+}
+
+.display2{
+    z-index: 2;
+}

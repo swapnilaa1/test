@@ -13,7 +13,7 @@ const initialState = {
 };
 
 export const signInUser = createAsyncThunk("signIn/signInUser", (data) => {
-  console.log("data in action", data);
+  // console.log("data in action", data);
   return RequestAPi.post(SIGN_IN, data).then((response) => response);
 });
 const signInSlice = createSlice({
@@ -26,7 +26,7 @@ const signInSlice = createSlice({
       state.isAuth = false;
     });
     builder.addCase(signInUser.fulfilled, (state, action) => {
-      console.log("action ", action);
+      // console.log("action ", action);
       // console.log("action payload in success", action.payload);
       // state.loading = false;
       // state.isAuth = true;
@@ -34,12 +34,10 @@ const signInSlice = createSlice({
       // console.log("action payload", action);
       // state.error = "";
       // state.token = action.payload.data.token;
-      console.log(
-        "hello ",
-        action.meta.arg.Username + ":" + action.meta.arg.Password,
-        "and type",
-        typeof action.meta.arg.Username + ":" + action.meta.arg.Password
-      );
+      // console.log(
+      // "hello ",
+      // typeof action.meta.arg.Username + ":" + action.meta.arg.Password
+      //);
       localStorage.setItem(
         "token",
         "Basic " +

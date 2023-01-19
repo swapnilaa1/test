@@ -21,7 +21,16 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCompMembers } from "../../redux/companyMemberSlice";
 
-const SelectUser = ({ openAddUser, setOpenAddUser, users, setUsers }) => {
+const SelectUser = ({
+  openAddUser,
+  setOpenAddUser,
+  users,
+  setUsers,
+  setUsersCc,
+  userName,
+  usersIdObj,
+  setUsersIdObj,
+}) => {
   //const [users, setUsers] = useState([]);
   const [count, setCount] = useState("1");
   //const [count, setCount] = useState("1");
@@ -29,25 +38,40 @@ const SelectUser = ({ openAddUser, setOpenAddUser, users, setUsers }) => {
   const data = useSelector(
     (state) => state.companyMemberReducers.localCompanyData
   );
-  console.log("data in select user", data);
+  // console.log("data in select user", data);
   const dispatch = useDispatch();
+  // console.log("users in ", users);
 
   const handleChange = (e, element) => {
-    console.log("elem", users, element.UserId);
-    console.log("due to handle Click", e, element);
+    // console.log("elem", users, element.UserId);
+    // console.log("due to handle Click", e, element);
     const index = users.indexOf(element.UserId);
     //setUsers(e.target.value);
-    if (index === -1) {
-      setUsers([...users, element.UserId]);
+
+    if (userName === "userId") {
+      if (index === -1) {
+        setUsers([...users, element.UserId]);
+      } else {
+        let newAr = users.filter((user) => {
+          //  console.log("user", user, element.UserId);
+          return user !== element.UserId;
+        });
+        setUsers(newAr);
+      }
     } else {
-      let newAr = users.filter((user) => {
-        console.log("user", user, element.UserId);
-        return user !== element.UserId;
-      });
-      setUsers(newAr);
+      if (index === -1) {
+        setUsersCc([...users, element]);
+        setUsersIdObj([...usersIdObj, element.UserId]);
+      } else {
+        let newAr = users.filter((user) => {
+          return user.UserId !== element.UserId;
+        });
+        let newIds = usersIdObj.filter((users) => users !== element.UserId);
+        setUsersCc(newAr);
+      }
     }
   };
-  console.log("users", users);
+  //console.log("users", users);
 
   useEffect(() => {
     dispatch(getCompMembers());
@@ -66,7 +90,13 @@ const SelectUser = ({ openAddUser, setOpenAddUser, users, setUsers }) => {
               >
                 <ListItemButton onClick={(e) => handleChange(e, element)}>
                   <ListItemText primary={element.Name} />
-                  <Checkbox checked={users.includes(element.UserId)} />
+                  <Checkbox
+                    checked={
+                      userName === "userId"
+                        ? users.includes(element.UserId)
+                        : usersIdObj.includes(element.UserId)
+                    }
+                  />
                 </ListItemButton>
               </ListItem>
             ))}
