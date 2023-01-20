@@ -9,7 +9,7 @@ import {
   Tab,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import AssignOthers from "./AssignOthers";
 
 const AddTask = ({ open, setOpen }) => {
@@ -17,6 +17,10 @@ const AddTask = ({ open, setOpen }) => {
 
   const handleChange = (e, nextValue) => {
     setValue(nextValue);
+  };
+
+  const submitForm = (data) => {
+    console.log("data in submit form", data);
   };
 
   return (
@@ -37,7 +41,7 @@ const AddTask = ({ open, setOpen }) => {
                 </TabList>
               </Box>
               <TabPanel value="1">
-                <AssignOthers />
+                <AssignOthers submitForm={(data) => submitForm(data)} />
               </TabPanel>
               <TabPanel value="2">Hello me</TabPanel>
             </TabContext>

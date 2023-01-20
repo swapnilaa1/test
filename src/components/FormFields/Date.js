@@ -17,7 +17,7 @@ const Date = ({ name, ...otherProps }) => {
     configText.error = true;
     configText.helperText = meta.error;
   }
-  return <TextField {...configText} />;
+  return <TextField type="date" {...configText} />;
 };
 
 export default Date;

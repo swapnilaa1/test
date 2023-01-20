@@ -2,12 +2,12 @@ import { TextField } from "@mui/material";
 import { useField } from "formik";
 import React from "react";
 
-const TextSelect = ({ name, value, setFun, ...otherProps }) => {
+const TextField1 = ({ name, ...otherProps }) => {
   const [field, meta] = useField(name);
+  console.log("field  , meta", field, meta);
   const configText = {
     ...otherProps,
     ...field,
-
     fullWidth: true,
     variant: "standard",
   };
@@ -17,15 +17,10 @@ const TextSelect = ({ name, value, setFun, ...otherProps }) => {
   }
   return (
     <TextField
-      InputProps={{
-        readOnly: true,
-      }}
       {...configText}
-      // value={value}
-      onChange={() => setFun()}
-      onClick={() => otherProps.setOpenAddUser(true)}
+      style={{ position: "relative", bottom: "40px" }}
     />
   );
 };
 
-export default TextSelect;
+export default TextField1;

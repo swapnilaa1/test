@@ -30,6 +30,7 @@ const SelectUser = ({
   userName,
   usersIdObj,
   setUsersIdObj,
+  setUserCount,
 }) => {
   //const [users, setUsers] = useState([]);
   const [count, setCount] = useState("1");
@@ -45,10 +46,11 @@ const SelectUser = ({
   const handleChange = (e, element) => {
     // console.log("elem", users, element.UserId);
     // console.log("due to handle Click", e, element);
-    const index = users.indexOf(element.UserId);
+
     //setUsers(e.target.value);
 
     if (userName === "userId") {
+      const index = users.indexOf(element.UserId);
       if (index === -1) {
         setUsers([...users, element.UserId]);
       } else {
@@ -59,6 +61,7 @@ const SelectUser = ({
         setUsers(newAr);
       }
     } else {
+      const index = usersIdObj.indexOf(element.UserId);
       if (index === -1) {
         setUsersCc([...users, element]);
         setUsersIdObj([...usersIdObj, element.UserId]);
@@ -66,12 +69,20 @@ const SelectUser = ({
         let newAr = users.filter((user) => {
           return user.UserId !== element.UserId;
         });
-        let newIds = usersIdObj.filter((users) => users !== element.UserId);
+        let newIds = usersIdObj.filter((usersv) => usersv !== element.UserId);
+        setUsersIdObj(newIds);
         setUsersCc(newAr);
       }
     }
   };
-  //console.log("users", users);
+  console.log("users", users);
+
+  const handleClick = () => {
+    users.length !== 0
+      ? setUserCount(`${users.length} Users`)
+      : setUserCount("");
+    setOpenAddUser(false);
+  };
 
   useEffect(() => {
     dispatch(getCompMembers());
@@ -124,7 +135,9 @@ const SelectUser = ({
         <Button variant="contained" onClick={() => setOpenAddUser(false)}>
           Cancel
         </Button>
-        <Button variant="contained">Add</Button>
+        <Button variant="contained" onClick={() => handleClick()}>
+          Add
+        </Button>
       </DialogActions>
     </Dialog>
   );

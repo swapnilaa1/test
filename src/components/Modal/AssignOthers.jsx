@@ -18,26 +18,36 @@ const initialState = {
   Title: "",
   Address: "",
   Description: "",
-  MultimediaData: "",
+  Multimedia: "",
   LeadId: null,
   TaskEndDate: "",
   Priority: "",
-  UserIds: [], // user having ids
-  TaskOwners: [], //cc array of object {UserId:200 , Name:"swapnil anil bhongale"}
+  UserIds: "", // user having ids // set No of valuyes
+  TaskOwners: "", //cc array of object {UserId:200 , Name:"swapnil anil bhongale"} // set no of values
 };
 const form_validation = Yup.object().shape({
   Title: Yup.string().required("Required"),
   Description: Yup.string().required("Required"),
-  MultimediaData: Yup.string().required("Required"),
-
-  TaskEndDate: Yup.string().required("Required"),
+  Multimedia: Yup.string().required("Required"),
+  UserIds: Yup.string().required("Required"),
+  TaskOwners: Yup.string().required("Required"),
+  //TaskEndDate: Yup.string().required("Required"),
   Priority: Yup.string().required("Required"),
 });
 
-const AssignOthers = () => {
+const AssignOthers = ({ submitForm }) => {
   const [users1, setUsers1] = useState([]);
   const [usersCc, setUsersCc] = useState([]);
   const [usersIdObj, setUsersIdObj] = useState([]);
+  const [users1Value, setUsers1Value] = useState("");
+  const [usersCcValue, setUsersCcValue] = useState("");
+
+  const [MediaObject, setMediaObject] = useState({
+    MultimediaData: "",
+    MultimediaFileName: "",
+    MultimediaExtension: "",
+    MultimediaType: "",
+  });
 
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const dispatch = useDispatch();
@@ -49,17 +59,23 @@ const AssignOthers = () => {
     setPriority(e.target.value);
   };
 
-  const handleSubmit = (values) => {
-    //   console.log("values", values);
+  const handleMultimedia = (baseString, mediaName, mediaExtention) => {
+    console.log("all 3 in handle", baseString, mediaName, mediaExtention);
+    setMediaObject({
+      MultimediaData: baseString,
+      MultimediaFileName: mediaName,
+      MultimediaExtension: mediaExtention,
+      MultimediaType: "",
+    });
   };
+
+  const handleSubmit = (values) => {
+    // send users1 and usersCc as
+    console.log("values while sbmitting", values);
+  };
+  console.log("media object", MediaObject);
   useEffect(() => {
-    dispatch(
-      getLeads({
-        From: 1,
-        To: -1,
-        Text: "",
-      })
-    );
+    dispatch(getLeads());
   }, []);
   //  console.log("users ", users1, usersCc);
   return (
@@ -84,30 +100,33 @@ const AssignOthers = () => {
                     label="Description"
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <FormControl
-                    control="file"
-                    name="MultimediaData"
-                    label="Attach File"
-                    setFun={(data) =>
-                      formik.setFieldValue("MultimediaData", data)
-                    }
-                    setFun1={(data) => formik.setFieldValue("Address", data)}
-                  />
+
+                <Grid container>
+                  <Grid item xs={12}>
+                    <FormControl
+                      control="file"
+                      name="Multimedia"
+                      label="Attach File"
+                      setFun={(data) =>
+                        formik.setFieldValue("Multimedia", data)
+                      }
+                      setFun1={(data) => formik.setFieldValue("Address", data)}
+                      handleMultimedia={(data, name, extention) =>
+                        handleMultimedia(data, name, extention)
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl
+                      control="Address"
+                      name="Address"
+                      label="Attach File"
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <FormControl
-                    control="input"
-                    name="Address"
-                    label="Attach File"
-                  />
-                </Grid>
+
                 <Grid item xs={6}>
-                  <FormControl
-                    control="date"
-                    name="TaskEndDate"
-                    label="Select Due Date"
-                  />
+                  Lead Customer name
                   {/* <TextField
                     placeholder="none"
                     type="date"
@@ -116,28 +135,45 @@ const AssignOthers = () => {
                   /> */}
                 </Grid>
                 <Grid item xs={6}>
-                  Hello
+                  <FormControl
+                    control="date"
+                    name="TaskEndDate"
+                    label="Select Due Date"
+                  />
                 </Grid>
                 <Grid item xs={6}>
-                  Hello
-                </Grid>
-                <Grid item xs={12}>
+                  Priority
                   <FormControl
-                    control="users"
-                    name="TaskOwners"
-                    label="Add Users"
-                    setOpenAddUser={(data) => setOpenAddUser(data)}
+                    control="Priority"
+                    name="Priority"
+                    label="Select Priority"
+                    setFun={(data) => formik.setFieldValue("Priority", data)}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <FormControl
                     control="users"
                     name="UserIds"
+                    label="Add Users"
+                    setOpenAddUser={(data) => setOpenAddUser(data)}
+                    // value={users1Value}
+                    // userCount={usersCcValue}
+                    setFun={(data) =>
+                      formik.setFieldValue("UserIds", `${users1Value} Users`)
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl
+                    control="users"
+                    name="TaskOwners"
                     label="Add CC Members"
                     setOpenAddUser={(data) => setOpenAddCc(data)}
+                    // value={usersCcValue}
                   />
                 </Grid>
               </Grid>
+              <button type="submit">Submit</button>
             </Form>
           );
         }}
@@ -185,14 +221,16 @@ const AssignOthers = () => {
         setUsers={setUsers1}
         openAddUser={openAddUser}
         setOpenAddUser={(data) => setOpenAddUser(data)}
+        setUserCount={(data) => setUsers1Value(data)}
       />
       <SelectUser
         userName="userCc"
         users={usersCc}
         usersIdObj={usersIdObj}
-        setUsersIdObj={setUsersIdObj}
+        setUsersIdObj={(data) => setUsersIdObj(data)}
         setUsersCc={setUsersCc}
         openAddUser={openAddCc}
+        setUserCount={(data) => setUsersCcValue(data)}
         setOpenAddUser={(data) => setOpenAddCc(data)}
       />
     </div>

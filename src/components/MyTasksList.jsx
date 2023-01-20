@@ -10,7 +10,9 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getTaskStatus } from "../redux/getTaskStatusSlice";
 import { getMyTasks } from "../redux/myTasksSlice";
+import { postStatus } from "../redux/postStatusUpdateSlice";
 import AddTask from "./Modal/AddTask";
 
 const MyTasksList = () => {
@@ -23,7 +25,7 @@ const MyTasksList = () => {
     dispatch(
       getMyTasks({
         From: 1,
-        To: 10,
+        To: 50,
         Title: "",
         UserId: "",
         IsArchive: false,
@@ -72,16 +74,27 @@ const MyTasksList = () => {
                 <TableCell>{data.TaskEndDate}</TableCell>
                 <TableCell>{data.Priority}</TableCell>
                 <TableCell>
-                  {data.TaskStatus === 0 ? "Accepted" : "Accept"}
+                  {data.TaskStatus === "Pending" ? (
+                    <button>Accept</button>
+                  ) : (
+                    "Accept"
+                  )}
                 </TableCell>
                 <TableCell>
                   <button>complete</button>
                 </TableCell>
                 <TableCell>
-                  <button>Partial Complete</button>
+                  <button onClick={() => dispatch(getTaskStatus())}>
+                    Partial Complete
+                  </button>
                 </TableCell>
                 <TableCell>
                   <button>Delete</button>
+                </TableCell>
+                <TableCell>
+                  <button onClick={() => dispatch(postStatus())}>
+                    Partial Send
+                  </button>
                 </TableCell>
               </TableRow>
             ))}

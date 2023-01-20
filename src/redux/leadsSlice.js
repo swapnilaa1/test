@@ -9,9 +9,11 @@ const initialState = {
 export const getLeads = createAsyncThunk("mytask/getLeads", (data) => {
   //console.log("data in getleads", data);
   //return RequestAPi.post(GET_LEADS, data).then((response) => response);
-  return RequestAPi.get(`${GET_COMPONY_MEM}?from=${1}&text=&to=${100}`).then(
-    (response) => response
-  );
+  return RequestAPi.post(GET_LEADS, {
+    From: 1,
+    To: -1,
+    Text: "",
+  }).then((response) => response);
 });
 const leadsSlice = createSlice({
   name: "leads",

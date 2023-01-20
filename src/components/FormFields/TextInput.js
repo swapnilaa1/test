@@ -14,7 +14,7 @@ const TextInput = ({ name, ...otherProps }) => {
     configText.error = true;
     configText.helperText = meta.error;
   }
-  return <TextField {...configText} style={{ zIndex: "1" }} />;
+  return <TextField {...configText} />;
 };
 
 export default TextInput;

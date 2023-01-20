@@ -1,11 +1,18 @@
 import { Height } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import { FastField, Formik, useField } from "formik";
-import React from "react";
+import React, { useState } from "react";
 
-const FileField = ({ name, formik, setFun, setFun1, ...otherProps }) => {
+const FileField = ({
+  name,
+  formik,
+  setFun,
+  handleMultimedia,
+  setFun1,
+  ...otherProps
+}) => {
   const [field, meta] = useField(name);
-  // console.log("other porps", formik);
+  const [filesrc, setFilesrc] = useState("");
   const configText = {
     ...otherProps,
     ...field,
@@ -18,43 +25,68 @@ const FileField = ({ name, formik, setFun, setFun1, ...otherProps }) => {
   //   }
 
   const handleFile = async (e) => {
-    // console.log("event ", e.target.files[0]);
+    const file = e.target.files[0];
+    const newAr = e.target.files[0].name.split(".");
+    // console.log("new Arr", newAr);
+    const Extention = newAr[newAr.length - 1];
+    const filsplice = newAr.slice(0, newAr.length - 1);
+    const FileName = filsplice.join("");
+    const baseString = await convertFileBase(file);
+    // console.log("file name ", FileName);
+    // console.log("Extention", Extention);
+    //console.log("event ", e.target.files);
+    //`console.log("baseString", baseString);
+    setFilesrc(baseString);
+    handleMultimedia(baseString, FileName, Extention);
+  };
+
+  const convertFileBase = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
   };
   return (
-    <FastField name="MultimediaData" className="form-control">
-      {(props) => {
-        const { field, form, meta } = props;
-        console.log("props in fast field", props);
+    <div>
+      <FastField name="MultimediaData" className="form-control">
+        {(props) => {
+          const { field, form, meta } = props;
+          //console.log("props in fast field", props);
 
-        return (
-          <div>
-            <TextField
-              style={{
-                width: "0",
-                height: "0",
-                zIndex: "2",
-                position: "absolute",
-                overflow: "",
-                opacity: "0",
-              }}
-              type="file"
-              className="form-control"
-              //   {...otherProps}
-              fullWidth
-              variant="standard"
-              label="Attach File"
-              onChange={(e) => {
-                handleFile(e);
-                setFun1(e.target.files[0].name);
-                setFun(e.target.files[0].name);
+          return (
+            <div>
+              <TextField
+                style={{
+                  zIndex: "100",
+                  opacity: "0",
+                }}
+                type="file"
+                className="form-control"
+                //   {...otherProps}
+                fullWidth
+                variant="standard"
+                label="Attach File"
+                onChange={(e) => {
+                  handleFile(e);
+                  setFun1(e.target.files[0].name);
+                  setFun(e.target.files[0].name);
 
-                //formik.setFieldValue("Address", e.target.files[0].name);
-              }}
-            />
-          </div>
-        );
-      }}
-    </FastField>
+                  //formik.setFieldValue("Address", e.target.files[0].name);
+                }}
+              />
+            </div>
+          );
+        }}
+      </FastField>
+    </div>
 
     // <TextField
     //   type="file"
