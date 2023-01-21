@@ -26,18 +26,8 @@ const signInSlice = createSlice({
       state.isAuth = false;
     });
     builder.addCase(signInUser.fulfilled, (state, action) => {
-      // console.log("action ", action);
-      // console.log("action payload in success", action.payload);
-      // state.loading = false;
-      // state.isAuth = true;
-      // state.isLoggedIn = true;
-      // console.log("action payload", action);
-      // state.error = "";
-      // state.token = action.payload.data.token;
-      // console.log(
-      // "hello ",
-      // typeof action.meta.arg.Username + ":" + action.meta.arg.Password
-      //);
+      console.log("action pay load in sign", action.payload.data.userId);
+      localStorage.setItem("userId", action.payload.data.userId);
       localStorage.setItem(
         "token",
         "Basic " +

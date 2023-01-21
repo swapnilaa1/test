@@ -3,12 +3,20 @@ import { GET_MY_TASKS, SIGN_IN } from "../api/apiEndPoints";
 import { RequestAPi } from "../api/Request";
 
 const initialState = {
-  //currentUse: {},
-  //loading: false,
-  //isLoggedIn: false,
-  //error: "",
-  //isAuth: localStorage.getItem("token") ? true : false,
-  //token: "",
+  sendData: {
+    TaskStatus: "",
+    Priority: "",
+    UserId: "",
+    FromDueDate: "",
+    ToDueDate: "",
+    IsArchive: false,
+    From: 1,
+    To: 10,
+    SortByDueDate: "",
+    Title: "",
+    UserIds: [],
+  },
+
   localData: [],
 };
 
@@ -19,7 +27,17 @@ export const getMyTasks = createAsyncThunk("mytask/getMyTasks", (data) => {
 const myTasksSlice = createSlice({
   name: "mytask",
   initialState,
-  reducers: {},
+  reducers: {
+    setSearchParams: (state, action) => {
+      console.log("action payload while setting params", action.payload);
+      state.sendData.FromDueDate = action.payload.FromDueDate;
+      state.sendData.ToDueDate = action.payload.ToDueDate;
+      state.sendData.UserIds = action.payload.userIds;
+      state.sendData.UserId = action.payload.UserId;
+      state.sendData.Priority = action.payload.filterObject.Priority;
+      state.sendData.TaskStatus = action.payload.filterObject.TaskStatus;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getMyTasks.pending, (state) => {
       state.loading = true;
@@ -50,3 +68,4 @@ const myTasksSlice = createSlice({
 });
 
 export default myTasksSlice.reducer;
+export const { setSearchParams } = myTasksSlice.actions;

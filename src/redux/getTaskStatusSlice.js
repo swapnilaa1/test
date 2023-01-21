@@ -3,7 +3,7 @@ import { GET_TASK_STATUS_FOR_PARTIAL } from "../api/apiEndPoints";
 import { RequestAPi } from "../api/Request";
 
 const initialState = {
-  localLeadData: [],
+  statusMaster: [],
 };
 
 export const getTaskStatus = createAsyncThunk(
@@ -28,7 +28,7 @@ const getTaskStatusSlice = createSlice({
     builder.addCase(getTaskStatus.fulfilled, (state, action) => {
       console.log("actiom in post Status succes", action.payload);
       //const data = action.payload.data.data.TaskList;
-      //state.localData = data;
+      state.statusMaster = action.payload.data.data;
     });
     builder.addCase(getTaskStatus.rejected, (state, action) => {
       console.log("rejected post");
