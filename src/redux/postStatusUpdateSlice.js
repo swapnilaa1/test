@@ -3,18 +3,15 @@ import { POST_UPDATE_TASK } from "../api/apiEndPoints";
 import { RequestAPi } from "../api/Request";
 
 const initialState = {
-  localLeadData: [],
+  Message:""
 };
 
 export const postStatus = createAsyncThunk(
   "poststatusupdate/postStatus",
   (data) => {
-    //console.log("data in getleads", data);
+    console.log("postStatus", data);
     //return RequestAPi.post(GET_LEADS, data).then((response) => response);
-    return RequestAPi.post(POST_UPDATE_TASK, {
-      TaskId: 733,
-      TaskStatusValue: 60,
-    }).then((response) => response);
+    return RequestAPi.post(POST_UPDATE_TASK, data).then((response) => response);
   }
 );
 const postStatusUpdateSlice = createSlice({
@@ -23,13 +20,15 @@ const postStatusUpdateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(postStatus.pending, (state) => {
-      state.loading = true;
-      state.isAuth = false;
+    //  state.loading = true;
+     // state.isAuth = false;
+     state.Message=""
     });
     builder.addCase(postStatus.fulfilled, (state, action) => {
-      console.log("actiom in post Status succes", action.payload);
+      console.log("actiom in post Status succes", action.payload.zz);
       //const data = action.payload.data.data.TaskList;
       //state.localData = data;
+      state.Message=action.payload.data.Message
     });
     builder.addCase(postStatus.rejected, (state, action) => {
       console.log("rejected post");
