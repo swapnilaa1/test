@@ -1,0 +1,22 @@
+.login{
+    
+    position: relative;
+    top: 300px;
+    padding: 0px 100px;
+}
+.logo-head{
+position:absolute ;
+margin: 14% 14% 0% 14%;
+font-weight: 700;
+font-size: larger;
+
+}
+.signup{
+    text-align:right ;
+    margin-right:20px;
+    margin-top: 30px;
+}
+.cell{
+    margin:0px ;
+    font-size: 12px;
+}

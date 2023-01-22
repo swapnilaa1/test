@@ -1,14 +1,35 @@
-import Navbar from "./components/Navbar";
-//import { Login } from "@mui/icons-material";
 import Mytask from "./components/Mytask";
-import AddTask from "./components/Modal/AddTask";
+import { Route, Routes } from "react-router-dom";
+import MyTeams from "./components/MyTeams";
+import Billings from "./components/Billings";
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
+import Settings from "./components/Settings";
+import Ffc from "./components/Ffc";
+import MiniDrawer from "./components/TestSidebar";
 
 function App() {
   return (
     <div className="App">
+      
       {/* <Navbar /> */}
       {/* <Login /> */}
-      <Mytask />
+      <Routes>
+   
+      <Route path="/auth/login" element={<Login/>}/>
+      
+
+      <Route path="/" element={<MiniDrawer/>}>
+          <Route path="dashboard" element={<Dashboard/>}/>
+          <Route path="mytasks" element={<Mytask/>}/>
+          <Route path="myteams" element={<MyTeams/>}/>
+          <Route path="billing" element={<Billings/>}/>
+          <Route path="settings" element={<Settings/>}/>
+
+      </Route>
+
+      </Routes>
+      
     </div>
   );
 }

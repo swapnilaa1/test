@@ -7,6 +7,7 @@ const TextInput = ({ name, ...otherProps }) => {
   const configText = {
     ...otherProps,
     ...field,
+    
     fullWidth: true,
     variant: "standard",
   };
@@ -14,7 +15,7 @@ const TextInput = ({ name, ...otherProps }) => {
     configText.error = true;
     configText.helperText = meta.error;
   }
-  return <TextField {...configText} />;
+  return <TextField {...configText} size="small"/>;
 };
 
 export default TextInput;

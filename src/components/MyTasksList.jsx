@@ -1,10 +1,12 @@
 import {
+  AppBar,
   Box,
   Button,
   Checkbox,
   Collapse,
   Container,
   Grid,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -18,8 +20,10 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Toolbar,
   Typography,
 } from "@mui/material";
+import { getMonth } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTaskStatus } from "../redux/getTaskStatusSlice";
@@ -30,6 +34,7 @@ import AddTask from "./Modal/AddTask";
 import CompleteModal from "./Modal/CompleteModal";
 import DeleteModal from "./Modal/DeleteModal";
 import PartialModal from "./Modal/PartialModal";
+import "../style/pages.css"
 
 const MyTasksList = () => {
   const [filterObject, setFilterObject] = useState({
@@ -203,6 +208,21 @@ const MyTasksList = () => {
     );
   };
 
+  // const getMonth=(num)=>{
+  //   let arr=["Jan" , "Feb" ,"Mar" ,"Apr" ,"May" ,"Jun" ,"Jul" ,"Aug" ,"Sep" ,"Oct" ,"Nov" , "Dec"]
+  //   return arr[]
+  // }
+
+  const getDisplayDate=(Date)=>{
+    let arr2=["Jan" , "Feb" ,"Mar" ,"Apr" ,"May" ,"Jun" ,"Jul" ,"Aug" ,"Sep" ,"Oct" ,"Nov" , "Dec"]
+  console.log("dtae" ,Date)
+   const arr= Date.substr(0 ,10).split("-")
+    const str2=`${arr[1]} ${arr2[0]} ${arr[2]}`
+
+   
+    return str2
+  }
+
   const handlefromDate = (date) => {
     const arr = date.split("-");
     const newStr = `${arr[1]}/${arr[2]}/${arr[0]}`;
@@ -211,7 +231,9 @@ const MyTasksList = () => {
 
   return (
     <div>
-      <div style={{ display: "flex", flexDirection: "row" }}>
+
+
+      {/* <div style={{ display: "flex", flexDirection: "row" }}>
         <List>
           <ListItem divider>
             <ListItemButton onClick={() => setListOpen(true)}>
@@ -220,140 +242,36 @@ const MyTasksList = () => {
           </ListItem>
         </List>
         <Collapse in={listOpen}>
-          <List SX={{ width: "500px", background: "grey" }}>
-            <ListItem divider>
-              <ListItemButton>
-                <ListItemText>
-                  <Paper sx={{ width: "500", height: "500" }}>
-                    <form onSubmit={handleSubmit}>
-                      <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                          <Typography>By Status</Typography>
-                          <TextField
-                            value={filterObject.TaskStatus}
-                            select
-                            fullWidth
-                            variant="standard"
-                            label="Status"
-                            onChange={(e) =>
-                              setFilterObject({
-                                ...filterObject,
-                                TaskStatus: e.target.value,
-                              })
-                            }
-                          >
-                            <MenuItem value="0">Accepeted</MenuItem>
-                            <MenuItem value="-1">Not Accepted</MenuItem>
-                            <MenuItem value="-2">Partial Completed</MenuItem>
-                            <MenuItem value="100">Completed</MenuItem>
-                          </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                          <Typography>By Priority</Typography>
-                          <TextField
-                            value={filterObject.Priority}
-                            select
-                            fullWidth
-                            variant="standard"
-                            label="Status"
-                            onChange={(e) =>
-                              setFilterObject({
-                                ...filterObject,
-                                Priority: e.target.value,
-                              })
-                            }
-                          >
-                            <MenuItem value="High">High Priority</MenuItem>
-                            <MenuItem value="Low">Low Priority</MenuItem>
-                          </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                          <Typography>By Member</Typography>
-                          <TextField select fullWidth variant="standard">
-                            {TeamMembers.map((members) => (
-                              <List>
-                                <ListItem>
-                                  <ListItemButton
-                                    onClick={() => handleTeam(members.UserId)}
-                                  >
-                                    <ListItemText primary={members.UserName} />
-                                    {/* <CheckBox checked={false} /> */}
-                                    <Checkbox
-                                      checked={userIds.includes(members.UserId)}
-                                    />
-                                  </ListItemButton>
-                                </ListItem>
-                              </List>
-                            ))}
-                          </TextField>
-                        </Grid>
-                        <Grid item xs={6}>
-                          <Typography>From Date</Typography>
-                          <TextField
-                            type="date"
-                            name="FromDueDate"
-                            variant="standard"
-                            value={filterObject.FromDueDate}
-                            onChange={(e) =>
-                              setFilterObject({
-                                ...filterObject,
-                                FromDueDate: e.target.value,
-                              })
-                            }
-                          />
-                        </Grid>
-                        <Grid item xs={6}>
-                          <Typography>To Date</Typography>
-                          <TextField
-                            type="date"
-                            name="ToDueDate"
-                            variant="standard"
-                            value={filterObject.ToDueDate}
-                            onChange={(e) =>
-                              setFilterObject({
-                                ...filterObject,
-                                ToDueDate: e.target.value,
-                              })
-                            }
-                          />
-                        </Grid>
-                      </Grid>
-                      <button type="submit">Click Me</button>
-                    </form>
-                  </Paper>
-                </ListItemText>
-              </ListItemButton>
-            </ListItem>
-          </List>
+         
         </Collapse>
         <input />
         <button onClick={() => setOpenDialogue(true)}>Add Task</button>
         <button>Export</button>
-      </div>
+      </div> */}
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell>Customer Name</TableCell>
-              <TableCell>Assigned By</TableCell>
-              <TableCell>Assigned Date</TableCell>
-              <TableCell>Due Date</TableCell>
-              <TableCell>Priority</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell><span className="cell">Title</span></TableCell>
+              <TableCell><span className="cell">Customer Name</span></TableCell>
+              <TableCell><span className="cell">Assigned By</span></TableCell>
+              <TableCell><span className="cell">Assigned Date</span> <IconButton><img height="12px" src=" https://testffc.nimapinfotech.com/assets/media/icons/sort.svg"/></IconButton> </TableCell>
+              <TableCell><span className="cell">Due Date</span> <IconButton><img height="12px" src=" https://testffc.nimapinfotech.com/assets/media/icons/sort.svg"/></IconButton></TableCell>
+              <TableCell><span className="cell">Priority</span></TableCell>
+              <TableCell><span className="cell">Status</span></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {localData?.map((data, index) => (
               <TableRow>
-                <TableCell>{data.Title}</TableCell>
-                <TableCell>{data.LeadName}</TableCell>
-                <TableCell>{data.AssignedByUserName}</TableCell>
-                <TableCell>{data.CreateDate}</TableCell>
-                <TableCell>{data.TaskEndDate}</TableCell>
-                <TableCell>{data.Priority}</TableCell>
-                <TableCell>{data.Priority}</TableCell>
-                <TableCell>
+                <TableCell><span className="cell">{data.Title}</span></TableCell>
+                <TableCell><span className="cell">{data.LeadName}</span></TableCell>
+                <TableCell><span className="cell">{data.AssignedByUserName}</span></TableCell>
+                <TableCell><span className="cell">{getDisplayDate(data.CreateDate)}</span></TableCell>
+                <TableCell><span className="cell">{getDisplayDate(data.TaskEndDate)}</span></TableCell>
+                <TableCell><span className="cell">{data.Priority}</span></TableCell>
+                
+                <TableCell><span className="cell">
                   {data.TaskStatus > 0 && data.TaskStatus < 100
                     ? `Partial Complete (${data.TaskStatus}%)`
                     : data.TaskStatus === 0
@@ -363,13 +281,14 @@ const MyTasksList = () => {
                     : data.TaskStatus === 100
                     ? "Completed"
                     : ""}
+                    </span>
                 </TableCell>
-                <TableCell>
-                  <button>Archieve</button>
+                <TableCell component="td" className="cell">
+                  <IconButton><img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskArchive.svg"/></IconButton>
                 </TableCell>
-                <TableCell>
+                <TableCell  component="td" className="cell">
                   {data.TaskStatus === -1 && (
-                    <button
+                    <IconButton
                       onClick={() =>
                         dispatch(
                           postStatus({
@@ -379,43 +298,40 @@ const MyTasksList = () => {
                         )
                       }
                     >
-                      Accept
-                    </button>
+                     <img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskAccept.svg"/>
+                    </IconButton>
                   )}
                 </TableCell>
-                <TableCell>
-                  <button>Coverage</button>
+                <TableCell component="td" className="cell">
+                  <IconButton><img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskViewTaskCoverage.svg"/></IconButton>
+                  
                 </TableCell>
-                <TableCell>
-                  <button onClick={() => setOpenDeleteModal(true)}>
-                    Delete
-                  </button>
+                <TableCell component="td" className="cell">
+                  <IconButton onClick={() => setOpenDeleteModal(true)}>
+                    <img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskDelete.svg"/>
+                  </IconButton>
                 </TableCell>
-                <TableCell>
+                <TableCell component="td" className="cell">
                   {data.TaskStatus >= 0 && data.TaskStatus < 100 && (
-                    <button onClick={() => handleComplete(data.TaskId)}>
-                      complete
-                    </button>
+                    <IconButton onClick={() => handleComplete(data.TaskId)}>
+                     <img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskComplete.svg"/>
+                    </IconButton>
                   )}
                 </TableCell>
 
-                <TableCell>
+                <TableCell component="td" className="cell">
                   {data.TaskStatus >= 0 && data.TaskStatus < 100 && (
-                    <button
+                    <IconButton
                       onClick={() =>
                         handlePartial(data.TaskId, data.CompletionPercentage)
                       }
                     >
-                      Partial Complete
-                    </button>
+                     <img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskPartialComplete.svg"/>
+                    </IconButton>
                   )}
                 </TableCell>
 
-                <TableCell>
-                  <button onClick={() => handlePartial(data.TaskId)}>
-                    Partial Send
-                  </button>
-                </TableCell>
+                
               </TableRow>
             ))}
           </TableBody>
@@ -446,3 +362,9 @@ const MyTasksList = () => {
 };
 
 export default MyTasksList;
+// https://testffc.nimapinfotech.com/assets/media/task/TaskPartialComplete.svg//partial
+// https://testffc.nimapinfotech.com/assets/media/task/TaskComplete.svg // complete
+// https://testffc.nimapinfotech.com/assets/media/task/TaskDelete.svg // delete
+//  https://testffc.nimapinfotech.com/assets/media/task/TaskViewTaskCoverage.svg // coverage
+//  https://testffc.nimapinfotech.com/assets/media/task/TaskAccept.svg // accept
+//https://testffc.nimapinfotech.com/assets/media/task/TaskArchive.svg
