@@ -33,14 +33,14 @@ const SignIn = () => {
     setCredentials({ ...credentials, [name]: value });
   };
 
-  console.log("sign in env", process.env.REACT_APP_BASE_URL);
+  //console.log("sign in env", process.env.REACT_APP_BASE_URL);
 
   const signIn = async () => {
     const response = await RequestAPi.post(SIGN_IN, {
       Username: "8113899206",
       Password: "12345678",
     });
-    console.log("response", response);
+    //console.log("response", response);
   };
 
   const handleSubmit = (e) => {
@@ -49,8 +49,8 @@ const SignIn = () => {
     // signIn();
     dispatch(signInUser(credentials));
   };
-  console.log("list ", list);
-  console.log("credes", credentials);
+  //  console.log("list ", list);
+  // console.log("credes", credentials);
   const obj = {
     From: 1,
     To: 10,

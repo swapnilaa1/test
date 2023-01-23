@@ -27,16 +27,26 @@ import { getMonth } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTaskStatus } from "../redux/getTaskStatusSlice";
-import { getMyTasks, setSearchParams } from "../redux/myTasksSlice";
+import {
+  getMyTasks,
+  setSearchParams,
+  setSortData,
+} from "../redux/myTasksSlice";
 import { postGetTeams } from "../redux/postGetTeamsSlice";
 import { postStatus } from "../redux/postStatusUpdateSlice";
 import AddTask from "./Modal/AddTask";
 import CompleteModal from "./Modal/CompleteModal";
 import DeleteModal from "./Modal/DeleteModal";
 import PartialModal from "./Modal/PartialModal";
-import "../style/pages.css"
+import "../style/pages.css";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 const MyTasksList = () => {
+  const [createDateOrder, setCreateDateOrder] = useState("1");
+  const [dueDateOrder, setDueDateOrder] = useState("1");
   const [filterObject, setFilterObject] = useState({
     TaskStatus: "",
     Priority: "",
@@ -86,71 +96,54 @@ const MyTasksList = () => {
   const dispatch = useDispatch();
   const callApi = () => {};
 
-  console.log("teamMembers in component", TeamMembers);
-  console.log("send Data ", sendData);
-  useEffect(() => {
-    dispatch(
-      getMyTasks({
-        From: 1,
-        To: 50,
-        Title: "",
-        UserId: "",
-        IsArchive: false,
-        Priority: "",
-        TaskStatus: "",
-        FromDueDate: "",
-        ToDueDate: "",
-        SortByDueDate: "",
-      })
-    );
+  //console.log("teamMembers in component", TeamMembers);
+  //console.log("send Data ", sendData);
+  // useEffect(() => {
+  //   dispatch(
+  //     getMyTasks({
+  //       From: 1,
+  //       To: 50,
+  //       Title: "",
+  //       UserId: "",
+  //       IsArchive: false,
+  //       Priority: "",
+  //       TaskStatus: "",
+  //       FromDueDate: "",
+  //       ToDueDate: "",
+  //       SortByDueDate: "",
+  //     })
+  //   );
 
-    dispatch(
-      postGetTeams({
-        from: 1,
-        to: -1,
-        text: "",
-      })
-    );
-  }, []);
-  useEffect(() => {
-    dispatch(getMyTasks(sendData));
-  }, [
-    sendData.FromDueDate,
-    sendData.ToDueDate,
-    sendData.From,
-    sendData.To,
-    sendData.UserId,
-    sendData.UserIds,
-    sendData.Priority,
-    sendData.TaskStatus,
-    sendData.SortByDueDate,
-    sendData.IsArchive,
-    sendData.Title,
-  ]);
-  console.log("local Data", localData);
-  console.log("message", Message);
-  // useEffect(()=>{
-
-  //   getMyTasks({
-  //     From: 1,
-  //     To: 50,
-  //     Title: "",
-  //     UserId: "",
-  //     IsArchive: false,
-  //     UserIds: [],
-  //     Priority: "",
-  //     TaskStatus: "",
-  //     FromDueDate: "",
-  //     ToDueDate: "",
-  //     SortByDueDate: "",
-  //   })
-
-  // } ,[Message==="Success"])
+  //   dispatch(
+  //     postGetTeams({
+  //       from: 1,
+  //       to: -1,
+  //       text: "",
+  //     })
+  //   );
+  // }, []);
+  // useEffect(() => {
+  //   dispatch(getMyTasks(sendData));
+  // }, [
+  //   sendData.FromDueDate,
+  //   sendData.ToDueDate,
+  //   sendData.From,
+  //   sendData.To,
+  //   sendData.UserId,
+  //   sendData.UserIds,
+  //   sendData.Priority,
+  //   sendData.TaskStatus,
+  //   sendData.SortByDueDate,
+  //   sendData.IsArchive,
+  //   sendData.Title,
+  // ]);
+  // console.log("local Data", localData);
+  //console.log("message", Message);
 
   const handleComplete = (id) => {
     const obj = { TaskId: id, TaskStatusValue: 100 };
     setCompleteConfig(obj);
-    console.log(openCompleteModal);
+    //  console.log(openCompleteModal);
     setOpenCompleteModal(true);
   };
 
@@ -170,7 +163,7 @@ const MyTasksList = () => {
 
     //dispatch(getTaskStatus());
   };
-  console.log(" complteconfig ", completeConfig);
+  // console.log(" complteconfig ", completeConfig);
   const handleTeam = (Id) => {
     const index = userIds.indexOf(Id);
     if (index === -1) {
@@ -183,7 +176,7 @@ const MyTasksList = () => {
       setUserIds(newAr);
     }
   };
-  console.log("filter object", filterObject, userIds);
+  //console.log("filter object", filterObject, userIds);
 
   const handleSubmit = (e) => {
     let fromdate = "";
@@ -196,7 +189,7 @@ const MyTasksList = () => {
     if (filterObject.ToDueDate !== "") {
       toduedate = handlefromDate(filterObject.ToDueDate);
     }
-    console.log("form submitted", fromdate, toduedate);
+    //  console.log("form submitted", fromdate, toduedate);
     dispatch(
       setSearchParams({
         filterObject,
@@ -213,15 +206,27 @@ const MyTasksList = () => {
   //   return arr[]
   // }
 
-  const getDisplayDate=(Date)=>{
-    let arr2=["Jan" , "Feb" ,"Mar" ,"Apr" ,"May" ,"Jun" ,"Jul" ,"Aug" ,"Sep" ,"Oct" ,"Nov" , "Dec"]
-  console.log("dtae" ,Date)
-   const arr= Date.substr(0 ,10).split("-")
-    const str2=`${arr[1]} ${arr2[0]} ${arr[2]}`
+  const getDisplayDate = (Date) => {
+    let arr2 = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    //  console.log("dtae", Date);
+    const arr = Date.substr(0, 10).split("-");
+    const str2 = `${arr[1]} ${arr2[0]} ${arr[2]}`;
 
-   
-    return str2
-  }
+    return str2;
+  };
 
   const handlefromDate = (date) => {
     const arr = date.split("-");
@@ -229,10 +234,31 @@ const MyTasksList = () => {
     return newStr;
   };
 
+  const handleCreateDate = (value) => {
+    setCreateDateOrder(value);
+    value !== "1" && setDueDateOrder("1");
+    if (value === "2") {
+      dispatch(setSortData({ order: "desc", column: "CreateDate" }));
+    }
+    if (value === "3") {
+      dispatch(setSortData({ order: "asc", column: "CreateDate" }));
+    }
+  };
+
+  const handleDueDate = (value) => {
+    value !== "1" && setCreateDateOrder("1");
+    setDueDateOrder(value);
+
+    if (value === "2") {
+      dispatch(setSortData({ order: "desc", column: "DueDate" }));
+    }
+    if (value === "3") {
+      dispatch(setSortData({ order: "asc", column: "DueDate" }));
+    }
+  };
+
   return (
     <div>
-
-
       {/* <div style={{ display: "flex", flexDirection: "row" }}>
         <List>
           <ListItem divider>
@@ -252,41 +278,125 @@ const MyTasksList = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell><span className="cell">Title</span></TableCell>
-              <TableCell><span className="cell">Customer Name</span></TableCell>
-              <TableCell><span className="cell">Assigned By</span></TableCell>
-              <TableCell><span className="cell">Assigned Date</span> <IconButton><img height="12px" src=" https://testffc.nimapinfotech.com/assets/media/icons/sort.svg"/></IconButton> </TableCell>
-              <TableCell><span className="cell">Due Date</span> <IconButton><img height="12px" src=" https://testffc.nimapinfotech.com/assets/media/icons/sort.svg"/></IconButton></TableCell>
-              <TableCell><span className="cell">Priority</span></TableCell>
-              <TableCell><span className="cell">Status</span></TableCell>
+              <TableCell>
+                <span className="cell">Title</span>
+              </TableCell>
+              <TableCell>
+                <span className="cell">Customer Name</span>
+              </TableCell>
+              <TableCell>
+                <span className="cell">Assigned By</span>
+              </TableCell>
+              <TableCell>
+                <span className="cell">Assigned Date</span>{" "}
+                {createDateOrder === "1" ? (
+                  <IconButton onClick={() => handleCreateDate("2")}>
+                    <img
+                      height="12px"
+                      src=" https://testffc.nimapinfotech.com/assets/media/icons/sort.svg"
+                    />
+                  </IconButton>
+                ) : createDateOrder === "2" ? (
+                  <IconButton onClick={() => handleCreateDate("3")}>
+                    <img
+                      height="12px"
+                      src="https://testffc.nimapinfotech.com/assets/media/icons/downarrow.svg"
+                    />
+                  </IconButton>
+                ) : createDateOrder === "3" ? (
+                  <IconButton onClick={() => handleCreateDate("2")}>
+                    <img
+                      height="12px"
+                      src="https://testffc.nimapinfotech.com/assets/media/icons/uparrow.svg"
+                    />
+                  </IconButton>
+                ) : (
+                  ""
+                )}
+              </TableCell>
+              <TableCell>
+                <span className="cell">Due Date</span> {}{" "}
+                {dueDateOrder === "1" ? (
+                  <IconButton onClick={() => handleDueDate("2")}>
+                    <img
+                      height="12px"
+                      src=" https://testffc.nimapinfotech.com/assets/media/icons/sort.svg"
+                    />
+                  </IconButton>
+                ) : dueDateOrder === "2" ? (
+                  <IconButton onClick={() => handleDueDate("3")}>
+                    <img
+                      height="12px"
+                      src="https://testffc.nimapinfotech.com/assets/media/icons/downarrow.svg"
+                    />
+                  </IconButton>
+                ) : dueDateOrder === "3" ? (
+                  <IconButton onClick={() => handleDueDate("2")}>
+                    <img
+                      height="12px"
+                      src="https://testffc.nimapinfotech.com/assets/media/icons/uparrow.svg"
+                    />
+                  </IconButton>
+                ) : (
+                  ""
+                )}
+              </TableCell>
+              <TableCell>
+                <span className="cell">Priority</span>
+              </TableCell>
+              <TableCell>
+                <span className="cell">Status</span>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {localData?.map((data, index) => (
               <TableRow>
-                <TableCell><span className="cell">{data.Title}</span></TableCell>
-                <TableCell><span className="cell">{data.LeadName}</span></TableCell>
-                <TableCell><span className="cell">{data.AssignedByUserName}</span></TableCell>
-                <TableCell><span className="cell">{getDisplayDate(data.CreateDate)}</span></TableCell>
-                <TableCell><span className="cell">{getDisplayDate(data.TaskEndDate)}</span></TableCell>
-                <TableCell><span className="cell">{data.Priority}</span></TableCell>
-                
-                <TableCell><span className="cell">
-                  {data.TaskStatus > 0 && data.TaskStatus < 100
-                    ? `Partial Complete (${data.TaskStatus}%)`
-                    : data.TaskStatus === 0
-                    ? "Accepted"
-                    : data.TaskStatus === -1
-                    ? "Not Accepted"
-                    : data.TaskStatus === 100
-                    ? "Completed"
-                    : ""}
-                    </span>
+                <TableCell>
+                  <span className="cell">{data.Title}</span>
+                </TableCell>
+                <TableCell>
+                  <span className="cell">{data.LeadName}</span>
+                </TableCell>
+                <TableCell>
+                  <span className="cell">{data.AssignedByUserName}</span>
+                </TableCell>
+                <TableCell>
+                  <span className="cell">
+                    {getDisplayDate(data.CreateDate)}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span className="cell">
+                    {getDisplayDate(data.TaskEndDate)}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span className="cell">{data.Priority}</span>
+                </TableCell>
+
+                <TableCell>
+                  <span className="cell">
+                    {data.TaskStatus > 0 && data.TaskStatus < 100
+                      ? `Partial Complete (${data.TaskStatus}%)`
+                      : data.TaskStatus === 0
+                      ? "Accepted"
+                      : data.TaskStatus === -1
+                      ? "Not Accepted"
+                      : data.TaskStatus === 100
+                      ? "Completed"
+                      : ""}
+                  </span>
                 </TableCell>
                 <TableCell component="td" className="cell">
-                  <IconButton><img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskArchive.svg"/></IconButton>
+                  <IconButton>
+                    <img
+                      height="20px"
+                      src="https://testffc.nimapinfotech.com/assets/media/task/TaskArchive.svg"
+                    />
+                  </IconButton>
                 </TableCell>
-                <TableCell  component="td" className="cell">
+                <TableCell component="td" className="cell">
                   {data.TaskStatus === -1 && (
                     <IconButton
                       onClick={() =>
@@ -298,23 +408,36 @@ const MyTasksList = () => {
                         )
                       }
                     >
-                     <img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskAccept.svg"/>
+                      <img
+                        height="20px"
+                        src="https://testffc.nimapinfotech.com/assets/media/task/TaskAccept.svg"
+                      />
                     </IconButton>
                   )}
                 </TableCell>
                 <TableCell component="td" className="cell">
-                  <IconButton><img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskViewTaskCoverage.svg"/></IconButton>
-                  
+                  <IconButton>
+                    <img
+                      height="20px"
+                      src="https://testffc.nimapinfotech.com/assets/media/task/TaskViewTaskCoverage.svg"
+                    />
+                  </IconButton>
                 </TableCell>
                 <TableCell component="td" className="cell">
                   <IconButton onClick={() => setOpenDeleteModal(true)}>
-                    <img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskDelete.svg"/>
+                    <img
+                      height="20px"
+                      src="https://testffc.nimapinfotech.com/assets/media/task/TaskDelete.svg"
+                    />
                   </IconButton>
                 </TableCell>
                 <TableCell component="td" className="cell">
                   {data.TaskStatus >= 0 && data.TaskStatus < 100 && (
                     <IconButton onClick={() => handleComplete(data.TaskId)}>
-                     <img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskComplete.svg"/>
+                      <img
+                        height="20px"
+                        src="https://testffc.nimapinfotech.com/assets/media/task/TaskComplete.svg"
+                      />
                     </IconButton>
                   )}
                 </TableCell>
@@ -326,12 +449,13 @@ const MyTasksList = () => {
                         handlePartial(data.TaskId, data.CompletionPercentage)
                       }
                     >
-                     <img height="20px" src="https://testffc.nimapinfotech.com/assets/media/task/TaskPartialComplete.svg"/>
+                      <img
+                        height="20px"
+                        src="https://testffc.nimapinfotech.com/assets/media/task/TaskPartialComplete.svg"
+                      />
                     </IconButton>
                   )}
                 </TableCell>
-
-                
               </TableRow>
             ))}
           </TableBody>
@@ -357,14 +481,34 @@ const MyTasksList = () => {
           setOpen={(data) => setOpenCompleteModal(data)}
         />
       )}
+      <div className="pagination">
+        <div>
+          <IconButton>
+            <span style={{ fontSize: "12px" }}>{`|`}</span>
+            <NavigateBeforeIcon fontSize="small" />
+          </IconButton>
+          <IconButton>
+            <NavigateBeforeIcon fontSize="small" />
+          </IconButton>
+          <IconButton>
+            <NavigateNextIcon fontSize="small" />
+          </IconButton>
+          <IconButton>
+            <NavigateNextIcon fontSize="small" />
+            <span style={{ fontSize: "12px" }}>{`|`}</span>
+          </IconButton>
+        </div>
+        <div>
+          <span>
+            {1}-{10}of{24}
+          </span>
+        </div>
+        <div className="item-page">
+          <span>Items Per Pages:</span>
+        </div>{" "}
+      </div>
     </div>
   );
 };
 
 export default MyTasksList;
-// https://testffc.nimapinfotech.com/assets/media/task/TaskPartialComplete.svg//partial
-// https://testffc.nimapinfotech.com/assets/media/task/TaskComplete.svg // complete
-// https://testffc.nimapinfotech.com/assets/media/task/TaskDelete.svg // delete
-//  https://testffc.nimapinfotech.com/assets/media/task/TaskViewTaskCoverage.svg // coverage
-//  https://testffc.nimapinfotech.com/assets/media/task/TaskAccept.svg // accept
-//https://testffc.nimapinfotech.com/assets/media/task/TaskArchive.svg

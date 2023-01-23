@@ -15,6 +15,8 @@ const initialState = {
     SortByDueDate: "",
     Title: "",
     UserIds: [],
+    SortColumn: "",
+    SortOrder: "",
   },
 
   localData: [],
@@ -28,6 +30,16 @@ const myTasksSlice = createSlice({
   name: "mytask",
   initialState,
   reducers: {
+    setSortData: (state, action) => {
+      state.sendData.SortColumn = action.payload.column;
+      state.sendData.SortOrder = action.payload.order;
+    },
+
+    setTitle: (state, action) => {
+      console.log("action payload in ste title", action.payload);
+      state.sendData.Title = action.payload;
+    },
+
     setSearchParams: (state, action) => {
       console.log("action payload while setting params", action.payload);
       state.sendData.FromDueDate = action.payload.FromDueDate;
@@ -68,4 +80,4 @@ const myTasksSlice = createSlice({
 });
 
 export default myTasksSlice.reducer;
-export const { setSearchParams } = myTasksSlice.actions;
+export const { setSortData, setTitle, setSearchParams } = myTasksSlice.actions;

@@ -20,3 +20,28 @@ font-size: larger;
     margin:0px ;
     font-size: 12px;
 }
+.filter-label{
+    font-weight: 700;
+    font-size: 12px;
+}
+.filter-content{
+    margin-bottom: "15px";
+}
+.buttonDiv{
+    margin-right: 15px;
+    display: flex;
+    flex-direction: row-reverse;
+    height: 5px;
+    font-weight: 700;
+}
+.cancelButton{
+    margin-left: 10px;
+    font-weight:700;
+}
+.pagination{
+    display: flex;
+    flex-direction:row-reverse ;
+}
+.item-page{
+    font-size: 15px;
+}

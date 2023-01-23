@@ -13,7 +13,7 @@ const Priority = ({ name, setFun, ...otherProps }) => {
   };
 
   const handleChange = (e, nextValue) => {
-    console.log("target event", e.target.value);
+    // console.log("target event", e.target.value);
     setFun(e.target.value);
     //setPriority(e.target.value);
   };

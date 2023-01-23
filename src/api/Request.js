@@ -33,9 +33,9 @@ RequestAPi.interceptors.response.use(
   },
   async (error) => {
     if (error?.response?.status === 403) {
-      console.log("in response interceptors due to error");
+      //console.log("in response interceptors due to error");
     }
-    console.log("error in response", error.config);
+    //console.log("error in response", error.config);
     return Promise.reject(error);
   }
 );
