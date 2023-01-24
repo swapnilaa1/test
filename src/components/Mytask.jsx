@@ -25,7 +25,7 @@ import {
   Collapse,
   Card,
 } from "@mui/material";
-import { getMyTasks, setSearchParams, setTitle } from "../redux/myTasksSlice";
+import { getMyTasks, setSearchParams, setTitle, setTOTODisplay } from "../redux/myTasksSlice";
 import React, { useState } from "react";
 import { postGetTeams } from "../redux/postGetTeamsSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,7 +38,7 @@ import { useTransition } from "react";
 
 const Mytask = () => {
   const [isPending, startTransition] = useTransition();
-  const { localData, sendData } = useSelector((state) => state.mytasksReducer);
+  const { difference , localData, sendData , count ,toToDisplay } = useSelector((state) => state.mytasksReducer);
   // const {
   //   FromDueDate,
   //   ToDueDate,
@@ -289,20 +289,20 @@ const Mytask = () => {
   console.log("search value", searchValue);
 
   useEffect(() => {
-    dispatch(
-      getMyTasks({
-        From: 1,
-        To: 10,
-        Title: "",
-        UserId: "",
-        IsArchive: false,
-        Priority: "",
-        TaskStatus: "",
-        FromDueDate: "",
-        ToDueDate: "",
-        SortByDueDate: "",
-      })
-    );
+    // dispatch(
+    //   getMyTasks({
+    //     From: 27,
+    //     To: 80,
+    //     Title: "",
+    //     UserId: "",
+    //     IsArchive: false,
+    //     Priority: "",
+    //     TaskStatus: "",
+    //     FromDueDate: "",
+    //     ToDueDate: "",
+    //     SortByDueDate: "",
+    //   })
+    // );
 
     dispatch(
       postGetTeams({
@@ -313,7 +313,9 @@ const Mytask = () => {
     );
   }, []);
   useEffect(() => {
+    console.log("dues to send data")
     dispatch(getMyTasks(sendData));
+    
   }, [
     sendData.FromDueDate,
     sendData.ToDueDate,
@@ -329,6 +331,14 @@ const Mytask = () => {
     sendData.SortColumn,
     sendData.SortOrder,
   ]);
+  useEffect(()=>{
+    if(localData!==undefined){
+      if(count<difference){
+        setTOTODisplay(count)
+
+      } 
+    }
+  } , [localData , localData!==undefined])
 
   return (
     <div>

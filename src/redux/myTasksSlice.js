@@ -18,8 +18,10 @@ const initialState = {
     SortColumn: "",
     SortOrder: "",
   },
-
+  difference:10,
+  toToDisplay:1,
   localData: [],
+  count:"",
 };
 
 export const getMyTasks = createAsyncThunk("mytask/getMyTasks", (data) => {
@@ -30,6 +32,19 @@ const myTasksSlice = createSlice({
   name: "mytask",
   initialState,
   reducers: {
+    setDifference:(state , action )=>{
+      state.difference=action.payload
+    },
+    setFrom:(state , action)=>{
+      state.sendData.From=action.payload
+      
+    },
+    setTo:(state  ,action)=>{
+      state.sendData.To=action.payload.To;
+    },
+    setTOTODisplay:(state , action)=>{
+
+    },
     setSortData: (state, action) => {
       state.sendData.SortColumn = action.payload.column;
       state.sendData.SortOrder = action.payload.order;
@@ -59,6 +74,7 @@ const myTasksSlice = createSlice({
       console.log("actiom in my task success", action.payload);
       const data = action.payload.data.data.TaskList;
       state.localData = data;
+      state.count=action.payload.data.data.TotalCount
       // state.loading = false;
       // state.isAuth = true;
       // state.isLoggedIn = true;
@@ -67,7 +83,7 @@ const myTasksSlice = createSlice({
       // state.token = action.payload.data.token;
       // localStorage.setItem("token", action.payload.data.token);
       // action.meta.arg[1]("/dashboard");
-      //console.log("action.meta.arg", action.meta.arg);
+      //console.log("actio ,n.meta.arg", action.meta.arg);
     });
     builder.addCase(getMyTasks.rejected, (state, action) => {
       // state.loading = false;
@@ -80,4 +96,4 @@ const myTasksSlice = createSlice({
 });
 
 export default myTasksSlice.reducer;
-export const { setSortData, setTitle, setSearchParams } = myTasksSlice.actions;
+export const {setDifference ,setSortData, setTitle, setSearchParams , setFrom , setTo ,setTOTODisplay} = myTasksSlice.actions;

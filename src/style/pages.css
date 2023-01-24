@@ -44,4 +44,6 @@ font-size: larger;
 }
 .item-page{
     font-size: 15px;
+    /* margin-top: 9px; */
+    margin: 9px 21px 9px 9px;
 }

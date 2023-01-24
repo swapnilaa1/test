@@ -5,6 +5,7 @@ import {
   Checkbox,
   Collapse,
   Container,
+  FormControl,
   Grid,
   IconButton,
   List,
@@ -13,6 +14,7 @@ import {
   ListItemText,
   MenuItem,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -29,6 +31,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTaskStatus } from "../redux/getTaskStatusSlice";
 import {
   getMyTasks,
+  setDifference,
   setSearchParams,
   setSortData,
 } from "../redux/myTasksSlice";
@@ -76,8 +79,8 @@ const MyTasksList = () => {
   });
   const [deleteConfig, setDeleteConfig] = useState({});
 
-  const { localData, sendData } = useSelector((state) => state.mytasksReducer);
-  // const {
+  const { localData, count, sendData , difference  , toToDisplay} = useSelector((state) => state.mytasksReducer);
+  // const {toToDisplay
   //   FromDueDate,
   //   ToDueDate,
   //   From,
@@ -485,27 +488,40 @@ const MyTasksList = () => {
         <div>
           <IconButton>
             <span style={{ fontSize: "12px" }}>{`|`}</span>
-            <NavigateBeforeIcon fontSize="small" />
+            <NavigateBeforeIcon fontSize="medium" />
           </IconButton>
           <IconButton>
-            <NavigateBeforeIcon fontSize="small" />
+            <NavigateBeforeIcon fontSize="medium" />
           </IconButton>
           <IconButton>
-            <NavigateNextIcon fontSize="small" />
+            <NavigateNextIcon fontSize="medium" />
           </IconButton>
           <IconButton>
-            <NavigateNextIcon fontSize="small" />
+            <NavigateNextIcon fontSize="medium" />
             <span style={{ fontSize: "12px" }}>{`|`}</span>
           </IconButton>
         </div>
-        <div>
+        <div className="item-page">
           <span>
-            {1}-{10}of{24}
+            {sendData.from}-{toToDisplay}of{count}
           </span>
         </div>
+        <div style={{marginBottom:"30px"}}><FormControl variant="standard" size="small" sx={{ mb: 3, mr:2,  minWidth: 60 , fontStretch:3 }}>
+        <Select
+          value={difference}
+          onChange={(e)=>dispatch(setDifference(e.target.value))}
+        >
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={30}>30</MenuItem>
+        </Select>
+      </FormControl></div>
+        
         <div className="item-page">
-          <span>Items Per Pages:</span>
-        </div>{" "}
+          <span>Items Per Pages:  </span>
+          </div>
+        
+        {" "}
       </div>
     </div>
   );
