@@ -26,14 +26,17 @@ import {
   Typography,
 } from "@mui/material";
 import { getMonth } from "date-fns";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTaskStatus } from "../redux/getTaskStatusSlice";
 import {
   getMyTasks,
   setDifference,
+  setEndFromAndTo,
+  setFromAndTo,
   setSearchParams,
   setSortData,
+  setStartFromAndTo,
 } from "../redux/myTasksSlice";
 import { postGetTeams } from "../redux/postGetTeamsSlice";
 import { postStatus } from "../redux/postStatusUpdateSlice";
@@ -79,7 +82,9 @@ const MyTasksList = () => {
   });
   const [deleteConfig, setDeleteConfig] = useState({});
 
-  const { localData, count, sendData , difference  , toToDisplay} = useSelector((state) => state.mytasksReducer);
+  const { localData, count, sendData, difference, toToDisplay } = useSelector(
+    (state) => state.mytasksReducer
+  );
   // const {toToDisplay
   //   FromDueDate,
   //   ToDueDate,
@@ -98,7 +103,9 @@ const MyTasksList = () => {
 
   const dispatch = useDispatch();
   const callApi = () => {};
-
+  const setOpen = () => {
+    setOpenCompleteModal(false);
+  };
   //console.log("teamMembers in component", TeamMembers);
   //console.log("send Data ", sendData);
   // useEffect(() => {
@@ -486,42 +493,57 @@ const MyTasksList = () => {
       )}
       <div className="pagination">
         <div>
-          <IconButton>
+          <IconButton
+            onClick={() => dispatch(setStartFromAndTo())}
+            disabled={sendData.From === 1}
+          >
             <span style={{ fontSize: "12px" }}>{`|`}</span>
             <NavigateBeforeIcon fontSize="medium" />
           </IconButton>
-          <IconButton>
+          <IconButton
+            disabled={sendData.From === 1}
+            onClick={() => dispatch(setFromAndTo({ direction: "rtl" }))}
+          >
             <NavigateBeforeIcon fontSize="medium" />
           </IconButton>
-          <IconButton>
+          <IconButton
+            disabled={sendData.To >= count}
+            onClick={() => dispatch(setFromAndTo({ direction: "ltr" }))}
+          >
             <NavigateNextIcon fontSize="medium" />
           </IconButton>
-          <IconButton>
+          <IconButton
+            onClick={() => dispatch(setEndFromAndTo())}
+            disabled={sendData.To >= count}
+          >
             <NavigateNextIcon fontSize="medium" />
             <span style={{ fontSize: "12px" }}>{`|`}</span>
           </IconButton>
         </div>
         <div className="item-page">
           <span>
-            {sendData.from}-{toToDisplay}of{count}
+            {sendData.From}-{toToDisplay}of{count}
           </span>
         </div>
-        <div style={{marginBottom:"30px"}}><FormControl variant="standard" size="small" sx={{ mb: 3, mr:2,  minWidth: 60 , fontStretch:3 }}>
-        <Select
-          value={difference}
-          onChange={(e)=>dispatch(setDifference(e.target.value))}
-        >
-          <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={30}>30</MenuItem>
-        </Select>
-      </FormControl></div>
-        
+        <div style={{ marginBottom: "30px" }}>
+          <FormControl
+            variant="standard"
+            size="small"
+            sx={{ mb: 3, mr: 2, minWidth: 60, fontStretch: 3 }}
+          >
+            <Select
+              value={difference}
+              onChange={(e) => dispatch(setDifference(e.target.value))}
+            >
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={15}>15</MenuItem>
+              <MenuItem value={25}>25</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
         <div className="item-page">
-          <span>Items Per Pages:  </span>
-          </div>
-        
-        {" "}
+          <span>Items Per Pages: </span>
+        </div>{" "}
       </div>
     </div>
   );

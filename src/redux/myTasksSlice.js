@@ -18,10 +18,12 @@ const initialState = {
     SortColumn: "",
     SortOrder: "",
   },
-  difference:10,
-  toToDisplay:1,
+  difference: 10,
+  toToDisplay: 1,
   localData: [],
-  count:"",
+  count: "",
+  rightCalled: false,
+  leftCalled: false,
 };
 
 export const getMyTasks = createAsyncThunk("mytask/getMyTasks", (data) => {
@@ -32,19 +34,44 @@ const myTasksSlice = createSlice({
   name: "mytask",
   initialState,
   reducers: {
-    setDifference:(state , action )=>{
-      state.difference=action.payload
+    setEndFromAndTo: (state, action) => {
+      state.rightCalled = true;
+      state.sendData.From = parseInt(state.count / state.difference) * 10 + 1;
+      console.log("from", state.sendData.From);
+      state.sendData.To = state.count;
     },
-    setFrom:(state , action)=>{
-      state.sendData.From=action.payload
-      
+    setStartFromAndTo: (state, action) => {
+      state.leftCalled = true;
+      state.sendData.From = 1;
+      state.sendData.To = state.difference;
     },
-    setTo:(state  ,action)=>{
-      state.sendData.To=action.payload.To;
+    setDifference: (state, action) => {
+      state.difference = action.payload;
+      state.sendData.To = state.sendData.From - 1 + state.difference;
     },
-    setTOTODisplay:(state , action)=>{
-
+    setFromAndTo: (state, action) => {
+      if (action.payload.direction === "ltr") {
+        console.log("in ltr");
+        state.sendData.From = state.sendData.To + 1;
+        console.log("from data checked");
+        state.sendData.To = state.sendData.From + state.difference - 1;
+        console.log("to data checked", state.sendData.To);
+      } else {
+        if (Math.sign(state.sendData.From - 1 - state.difference) !== -1) {
+          state.sendData.To = state.sendData.From - 1;
+          state.sendData.From = state.sendData.From - state.difference;
+        } else {
+          state.sendData.To = state.sendData.From - 1;
+          state.sendData.From = 1;
+        }
+        // state.sendData.From = state.sendData.To + 1;
+        // state.sendData.To = state.difference + state.difference;
+      }
     },
+    // setTo: (state, action) => {
+    //   state.sendData.To = action.payload.To;
+    // },
+    setTOTODisplay: (state, action) => {},
     setSortData: (state, action) => {
       state.sendData.SortColumn = action.payload.column;
       state.sendData.SortOrder = action.payload.order;
@@ -74,16 +101,23 @@ const myTasksSlice = createSlice({
       console.log("actiom in my task success", action.payload);
       const data = action.payload.data.data.TaskList;
       state.localData = data;
-      state.count=action.payload.data.data.TotalCount
-      // state.loading = false;
-      // state.isAuth = true;
-      // state.isLoggedIn = true;
-      // console.log("action payload", action);
-      // state.error = "";
-      // state.token = action.payload.data.token;
-      // localStorage.setItem("token", action.payload.data.token);
+      state.count = action.payload.data.data.TotalCount;
+      console.log("state count", state.count);
+      //state.toToDisplay=localData.le
+
+      if (state.count < state.sendData.To && !state.rightCalled) {
+        state.toToDisplay = state.count;
+      } else if (state.rightCalled) {
+        state.toToDisplay = state.count;
+      } else if (
+        state.count >= state.difference ||
+        state.count - state.toToDisplay < state.difference
+      ) {
+        state.toToDisplay = state.sendData.From - 1 + state.difference;
+      }
+      state.rightCalled = false;
+
       // action.meta.arg[1]("/dashboard");
-      //console.log("actio ,n.meta.arg", action.meta.arg);
     });
     builder.addCase(getMyTasks.rejected, (state, action) => {
       // state.loading = false;
@@ -96,4 +130,15 @@ const myTasksSlice = createSlice({
 });
 
 export default myTasksSlice.reducer;
-export const {setDifference ,setSortData, setTitle, setSearchParams , setFrom , setTo ,setTOTODisplay} = myTasksSlice.actions;
+export const {
+  setFromAndTo,
+  setDifference,
+  setSortData,
+  setTitle,
+  setSearchParams,
+  setEndFromAndTo,
+  setStartFromAndTo,
+  // setFrom,
+  // setTo,
+  setTOTODisplay,
+} = myTasksSlice.actions;

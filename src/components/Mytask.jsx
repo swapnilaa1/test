@@ -25,7 +25,12 @@ import {
   Collapse,
   Card,
 } from "@mui/material";
-import { getMyTasks, setSearchParams, setTitle, setTOTODisplay } from "../redux/myTasksSlice";
+import {
+  getMyTasks,
+  setSearchParams,
+  setTitle,
+  setTOTODisplay,
+} from "../redux/myTasksSlice";
 import React, { useState } from "react";
 import { postGetTeams } from "../redux/postGetTeamsSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,11 +39,17 @@ import SignIn from "./SignIn";
 import "../style/pages.css";
 import { useEffect } from "react";
 import { useTransition } from "react";
+import { useRef } from "react";
 //import { TabContext, TabPanel } from "@mui/lab";
 
 const Mytask = () => {
+  const submitRef = useRef(null);
   const [isPending, startTransition] = useTransition();
-  const { difference , localData, sendData , count ,toToDisplay } = useSelector((state) => state.mytasksReducer);
+  const { difference, localData, sendData, count, toToDisplay } = useSelector(
+    (state) => state.mytasksReducer
+  );
+
+  const { Message } = useSelector((state) => state.postStatusUpdateReducer);
   // const {
   //   FromDueDate,
   //   ToDueDate,
@@ -313,9 +324,11 @@ const Mytask = () => {
     );
   }, []);
   useEffect(() => {
-    console.log("dues to send data")
+    // if (sendData.From < sendData.To) {
+    console.log("dues to send data");
     dispatch(getMyTasks(sendData));
-    
+    // submitRef.current.press();
+    //}
   }, [
     sendData.FromDueDate,
     sendData.ToDueDate,
@@ -330,15 +343,19 @@ const Mytask = () => {
     sendData.Title,
     sendData.SortColumn,
     sendData.SortOrder,
+    difference,
+    Message,
   ]);
-  useEffect(()=>{
-    if(localData!==undefined){
-      if(count<difference){
-        setTOTODisplay(count)
-
-      } 
-    }
-  } , [localData , localData!==undefined])
+  // useEffect(() => {
+  //   if (localData !== undefined) {
+  //     if (count < difference) {
+  //       setTOTODisplay(count);
+  //     }
+  //   }
+  // }, [localData, localData !== undefined]);
+  const handle = () => {
+    console.log("ref", submitRef.current);
+  };
 
   return (
     <div>
@@ -356,8 +373,9 @@ const Mytask = () => {
           label="Search"
           variant="standard"
           onChange={(e) => handleSearch(e)}
+          //onKeyPress={(e) => handle(e)}
         />
-        <Button>Add Task</Button>
+        <Button onClick={() => handle()}>Add Task</Button>
         <Button>Export</Button>
       </Grid>
       <Box>
@@ -376,7 +394,7 @@ const Mytask = () => {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <MyTasksList />
+            <MyTasksList ref={submitRef} />
           </TabPanel>
           <TabPanel value="2">
             <SignIn />
