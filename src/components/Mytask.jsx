@@ -357,26 +357,33 @@ const Mytask = () => {
     console.log("ref", submitRef.current);
   };
 
+  
   return (
     <div>
       <Grid
         container
         component="div"
+      
         style={{ display: "flex", flexDirection: "row" }}
       >
-        <Button color="secondary" onClick={openPerson}>
+       <div style={{flexGrow:"1"}}><Button variant="contained" onClick={openPerson} size="small">
           Filter
-        </Button>
+        </Button>{Person}</div> 
 
-        {Person}
-        <TextField
+        <div className="searchIp"><TextField
+        fullWidth
+        size="small"
           label="Search"
           variant="standard"
           onChange={(e) => handleSearch(e)}
           //onKeyPress={(e) => handle(e)}
-        />
-        <Button onClick={() => handle()}>Add Task</Button>
-        <Button>Export</Button>
+          sx={{mr:2}}
+        /></div>
+        
+        <div><Button onClick={() => handle()} sx={{mr:2}} variant="contained"  size="small">Add Task</Button>
+        <Button variant="contained" size="small">Export</Button></div>
+        
+     
       </Grid>
       <Box>
         <TabContext value={value}>

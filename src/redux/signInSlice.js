@@ -11,7 +11,7 @@ const initialState = {
   token: "",
   data: [],
   success:"",
-  token:""
+  
 };
 
 export const signInUser = createAsyncThunk("signIn/signInUser", (data) => {

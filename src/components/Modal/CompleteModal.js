@@ -8,6 +8,7 @@ import {
   DialogContentText,
   DialogTitle,
   Tab,
+  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,22 +29,23 @@ const CompleteModal = ({ config, open, setOpen }) => {
 
   return (
     <Dialog open={open}>
-      <DialogTitle>Complete Task</DialogTitle>
+      <DialogTitle><h6 className="complteTitle">COMPLETE TASK</h6></DialogTitle>
       <DialogContent dividers>
         <DialogContentText>
-          <Box>Are You Sure You Have Complted The Task</Box>
+        <div className="completeModal">Are you sure this Task is complete?</div>  
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={() => setOpen(false)}>
-          Cancel
+        <Button onClick={() => setOpen(false)} size="small" variant="text">
+        <Typography sx={{fontSize:14 , textTransform:"capitalize" , color:"black"}}>Cancel</Typography>
         </Button>
         <Button
-          variant="contained"
-          onClick={() => dispatch(postStatus(config))}
-          ref={ref}
+          size="small"
+          variant="text"
+          onClick={() => dispatch(postStatus({data:config , fun:()=>setOpen()}))}
+        sx={{m:1 , mr:3}}
         >
-          Add
+        <Typography sx={{fontSize:14 , textTransform:"capitalize"}}>Yes</Typography>
         </Button>
       </DialogActions>
     </Dialog>

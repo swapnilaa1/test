@@ -47,3 +47,53 @@ font-size: larger;
     /* margin-top: 9px; */
     margin: 9px 21px 9px 9px;
 }
+.partial{
+    height: 150px;
+    width: 400px;
+    margin-top: 15px;
+}
+.internal{
+    height: 36px;
+    width: 70px;
+    text-align: center;
+    display: inline-block;
+    border: 1px solid rgb(170 151 151 );
+    /* margin: 0px; */
+    padding: 6px;
+    border-radius: 3px;
+    margin-right: 20px;
+    font-size: 14px;
+    margin-top: 15px;
+    opacity: 0.8;
+}
+.completeModal{
+    width: 400px;
+    height: 40px;
+    margin-top: 31px;
+    margin-top: 17px;
+    font-size: 14px;
+
+}
+.complteTitle{
+    margin-top: 5px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.modalTitle{
+    font-weight: 500;
+    font-size: 18px;
+    margin-top: 8px;
+    margin-left: 4px;
+    padding: 0px;
+}
+.int-border{
+    border: 1px solid blue;
+}
+.searchIp{
+    width: 252px;
+    position: relative;
+    bottom: 15px;
+    right: 7px;
+ 
+}

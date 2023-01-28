@@ -19,6 +19,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
   TableRow,
   TextField,
@@ -284,11 +285,11 @@ const MyTasksList = () => {
         <button onClick={() => setOpenDialogue(true)}>Add Task</button>
         <button>Export</button>
       </div> */}
-      <TableContainer>
-        <Table>
+      <TableContainer component={Paper} sx={{maxHeight:"600px"}}>
+        <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>
+              <TableCell align="left">
                 <span className="cell">Title</span>
               </TableCell>
               <TableCell>
@@ -357,6 +358,12 @@ const MyTasksList = () => {
               <TableCell>
                 <span className="cell">Status</span>
               </TableCell>
+              <TableCell padding="none"></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -412,8 +419,8 @@ const MyTasksList = () => {
                       onClick={() =>
                         dispatch(
                           postStatus({
-                            TaskId: data.TaskId,
-                            TaskStatusValue: 0,
+                           data:{ TaskId: data.TaskId,
+                            TaskStatusValue: 0,}
                           })
                         )
                       }
@@ -456,7 +463,7 @@ const MyTasksList = () => {
                   {data.TaskStatus >= 0 && data.TaskStatus < 100 && (
                     <IconButton
                       onClick={() =>
-                        handlePartial(data.TaskId, data.CompletionPercentage)
+                        handlePartial(data.TaskId, data.TaskStatus)
                       }
                     >
                       <img
@@ -469,6 +476,7 @@ const MyTasksList = () => {
               </TableRow>
             ))}
           </TableBody>
+          
         </Table>
       </TableContainer>
       <AddTask open={openDialogue} setOpen={(data) => setOpenDialogue(data)} />

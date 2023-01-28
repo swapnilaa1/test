@@ -13,8 +13,11 @@ import { Box } from "@mui/system";
 import { useDispatch, useSelector } from "react-redux";
 import { postStatus } from "../../redux/postStatusUpdateSlice";
 import { getTaskStatus } from "../../redux/getTaskStatusSlice";
+import "../../style/pages.css"
 const PartialModal = ({ config, open, setOpen }) => {
   const [transferConfig, setTransferConfig] = useState(config);
+  const [selectedConfig, setSelectedConfig] = useState(config);
+  
   const id = useId();
   const { statusMaster } = useSelector((state) => state.getTaskStatusReducer);
   const dispatch = useDispatch();
@@ -29,8 +32,14 @@ const PartialModal = ({ config, open, setOpen }) => {
     const configToTransfer = { TaskId: config.TaskId, TaskStatusValue: data };
     console.log("config to transfer in ");
     setTransferConfig(configToTransfer);
-    dispatch(postStatus(configToTransfer));
+    //dispatch(postStatus(configToTransfer));
   };
+
+  const getClasses=(value)=>{
+   //let classes="internal"
+    return transferConfig.TaskStatusValue==value?"internal int-border":"internal"
+
+  }
   console.log("config", config);
   console.log("transfer config ", transferConfig);
 
@@ -39,33 +48,37 @@ const PartialModal = ({ config, open, setOpen }) => {
   };
   return (
     <Dialog open={open}>
-      <DialogTitle>Partial Complete</DialogTitle>
+      <DialogTitle><h6 className="modalTitle">Partial Complete</h6></DialogTitle>
       <DialogContent dividers>
         <DialogContentText>
-          <Box>
+          <div className="partial">
             {statusMaster.map((data) => (
               <div
+              className={getClasses(data.Value)}
                 id={id}
                 key={data.id}
-                style={{ height: "50px", width: "50px" }}
+              
                 onClick={() => handleClick(data.Value)}
               >
-                {data.Value}
+                {`${data.Value}%`}
               </div>
             ))}{" "}
-          </Box>
+          </div>
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={() => setOpen(false)}>
+        
+        <Button variant="text" onClick={() => setOpen(false)} size="small">
           Cancel
         </Button>
 
         <Button
           variant="contained"
-          onClick={() => dispatch(postStatus(transferConfig))}
+          size="small"
+          onClick={() => dispatch(postStatus({data:transferConfig , fun:()=>setOpen()}))}
+          sx={{mr:3}}
         >
-          Add
+          Done
         </Button>
       </DialogActions>
     </Dialog>
