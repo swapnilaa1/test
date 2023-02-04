@@ -1,13 +1,19 @@
 import { CheckBox } from "@mui/icons-material";
 import {
   Box,
+  Button,
   FormControlLabel,
   Grid,
   MenuItem,
   TextField,
 } from "@mui/material";
 import { Formik, Form } from "formik";
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useDispatch } from "react-redux";
 import { getLeads } from "../../redux/leadsSlice";
 import SelectUser from "./SelectUser";
@@ -35,7 +41,10 @@ const form_validation = Yup.object().shape({
   Priority: Yup.string().required("Required"),
 });
 
-const AssignOthers = ({ submitForm }) => {
+const AssignOthers = ({ submitForm, setOpen }) => {
+  // useImperativeHandle(ref, () => ({
+  //   handleSubmit1: () => {},
+  // }));
   const [users1, setUsers1] = useState([]);
   const [usersCc, setUsersCc] = useState([]);
   const [usersIdObj, setUsersIdObj] = useState([]);
@@ -83,7 +92,7 @@ const AssignOthers = ({ submitForm }) => {
       <Formik
         initialValues={initialState}
         validationSchema={form_validation}
-        onSubmit={handleSubmit}
+        onSubmit={submitForm}
       >
         {(formik) => {
           console.log("values", formik.values);
@@ -150,7 +159,7 @@ const AssignOthers = ({ submitForm }) => {
                     setFun={(data) => formik.setFieldValue("Priority", data)}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <FormControl
                     control="users"
                     name="UserIds"
@@ -162,7 +171,7 @@ const AssignOthers = ({ submitForm }) => {
                       formik.setFieldValue("UserIds", `${users1Value} Users`)
                     }
                   />
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12}>
                   <FormControl
                     control="users"
@@ -173,7 +182,11 @@ const AssignOthers = ({ submitForm }) => {
                   />
                 </Grid>
               </Grid>
-              <button type="submit">Submit</button>
+              <div className="buttonDiv">
+                <hr />
+                <Button>Add</Button>{" "}
+                <Button onClick={() => setOpen(false)}> Cancel</Button>
+              </div>
             </Form>
           );
         }}

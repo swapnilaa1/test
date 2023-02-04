@@ -24,6 +24,7 @@ import {
   TableRow,
   TextField,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { getMonth } from "date-fns";
@@ -43,13 +44,14 @@ import { postGetTeams } from "../redux/postGetTeamsSlice";
 import { postStatus } from "../redux/postStatusUpdateSlice";
 import AddTask from "./Modal/AddTask";
 import CompleteModal from "./Modal/CompleteModal";
-import DeleteModal from "./Modal/DeleteModal";
+
 import PartialModal from "./Modal/PartialModal";
 import "../style/pages.css";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { deleteTask } from "../redux/deletetaskSlice";
 
 const MyTasksList = () => {
   const [createDateOrder, setCreateDateOrder] = useState("1");
@@ -81,7 +83,9 @@ const MyTasksList = () => {
     TaskId: 0,
     TaskStatusValue: 0,
   });
-  const [deleteConfig, setDeleteConfig] = useState({});
+  const [deleteConfig, setDeleteConfig] = useState({
+    TaskId: 0,
+  });
 
   const { localData, count, sendData, difference, toToDisplay } = useSelector(
     (state) => state.mytasksReducer
@@ -158,7 +162,11 @@ const MyTasksList = () => {
     setOpenCompleteModal(true);
   };
 
-  const handleDelete = (id) => {};
+  const handleDelete = (id) => {
+    const obj = { taskId: id };
+    setDeleteConfig(obj);
+    setOpenDeleteModal(true);
+  };
 
   const handlePartial = (id, percentage) => {
     const obj = { TaskId: id, TaskStatusValue: percentage };
@@ -285,7 +293,7 @@ const MyTasksList = () => {
         <button onClick={() => setOpenDialogue(true)}>Add Task</button>
         <button>Export</button>
       </div> */}
-      <TableContainer component={Paper} sx={{maxHeight:"600px"}}>
+      <TableContainer component={Paper}>
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -356,7 +364,7 @@ const MyTasksList = () => {
                 <span className="cell">Priority</span>
               </TableCell>
               <TableCell>
-                <span className="cell">Status</span>
+                <span className="cell ">Status</span>
               </TableCell>
               <TableCell padding="none"></TableCell>
               <TableCell></TableCell>
@@ -370,10 +378,10 @@ const MyTasksList = () => {
             {localData?.map((data, index) => (
               <TableRow>
                 <TableCell>
-                  <span className="cell">{data.Title}</span>
+                  <span className="cell span-link">{data.Title}</span>
                 </TableCell>
                 <TableCell>
-                  <span className="cell">{data.LeadName}</span>
+                  <span className="cell span-link">{data.LeadName}</span>
                 </TableCell>
                 <TableCell>
                   <span className="cell">{data.AssignedByUserName}</span>
@@ -393,97 +401,112 @@ const MyTasksList = () => {
                 </TableCell>
 
                 <TableCell>
-                  <span className="cell">
-                    {data.TaskStatus > 0 && data.TaskStatus < 100
-                      ? `Partial Complete (${data.TaskStatus}%)`
-                      : data.TaskStatus === 0
-                      ? "Accepted"
-                      : data.TaskStatus === -1
-                      ? "Not Accepted"
-                      : data.TaskStatus === 100
-                      ? "Completed"
-                      : ""}
-                  </span>
-                </TableCell>
-                <TableCell component="td" className="cell">
-                  <IconButton>
-                    <img
-                      height="20px"
-                      src="https://testffc.nimapinfotech.com/assets/media/task/TaskArchive.svg"
-                    />
-                  </IconButton>
-                </TableCell>
-                <TableCell component="td" className="cell">
-                  {data.TaskStatus === -1 && (
-                    <IconButton
-                      onClick={() =>
-                        dispatch(
-                          postStatus({
-                           data:{ TaskId: data.TaskId,
-                            TaskStatusValue: 0,}
-                          })
-                        )
-                      }
-                    >
-                      <img
-                        height="20px"
-                        src="https://testffc.nimapinfotech.com/assets/media/task/TaskAccept.svg"
-                      />
-                    </IconButton>
+                  {data.TaskStatus > 0 && data.TaskStatus < 100 ? (
+                    <span className="cell status-partial">
+                      {`Partial Complete (${data.TaskStatus}%)`}{" "}
+                    </span>
+                  ) : data.TaskStatus === 0 ? (
+                    <span className="cell status-accepted">Accepted</span>
+                  ) : data.TaskStatus === -1 ? (
+                    <span className="cell status-not-accepted">
+                      Not Accepted
+                    </span>
+                  ) : data.TaskStatus === 100 ? (
+                    <span className="cell status-completed">Completed</span>
+                  ) : (
+                    ""
                   )}
                 </TableCell>
                 <TableCell component="td" className="cell">
-                  <IconButton>
-                    <img
-                      height="20px"
-                      src="https://testffc.nimapinfotech.com/assets/media/task/TaskViewTaskCoverage.svg"
-                    />
-                  </IconButton>
+                  <Tooltip title="Taskarchieve" placement="top" arrow>
+                    <IconButton>
+                      <img
+                        height="20px"
+                        src="https://testffc.nimapinfotech.com/assets/media/task/TaskArchive.svg"
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
                 <TableCell component="td" className="cell">
-                  <IconButton onClick={() => setOpenDeleteModal(true)}>
-                    <img
-                      height="20px"
-                      src="https://testffc.nimapinfotech.com/assets/media/task/TaskDelete.svg"
-                    />
-                  </IconButton>
+                  {data.TaskStatus === -1 && (
+                    <Tooltip title="Accept" placement="top" arrow>
+                      <IconButton
+                        onClick={() =>
+                          dispatch(
+                            postStatus({
+                              data: { TaskId: data.TaskId, TaskStatusValue: 0 },
+                            })
+                          )
+                        }
+                      >
+                        <img
+                          height="20px"
+                          src="https://testffc.nimapinfotech.com/assets/media/task/TaskAccept.svg"
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </TableCell>
+                <TableCell component="td" className="cell">
+                  <Tooltip title="Coverage" placement="top" arrow>
+                    <IconButton>
+                      <img
+                        height="20px"
+                        src="https://testffc.nimapinfotech.com/assets/media/task/TaskViewTaskCoverage.svg"
+                      />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+                <TableCell component="td" className="cell">
+                  <Tooltip title="Delete" placement="top" arrow>
+                    <IconButton onClick={() => handleDelete(data.TaskId)}>
+                      <img
+                        height="20px"
+                        src="https://testffc.nimapinfotech.com/assets/media/task/TaskDelete.svg"
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
                 <TableCell component="td" className="cell">
                   {data.TaskStatus >= 0 && data.TaskStatus < 100 && (
-                    <IconButton onClick={() => handleComplete(data.TaskId)}>
-                      <img
-                        height="20px"
-                        src="https://testffc.nimapinfotech.com/assets/media/task/TaskComplete.svg"
-                      />
-                    </IconButton>
+                    <Tooltip title="Complete" placement="top" arrow>
+                      <IconButton onClick={() => handleComplete(data.TaskId)}>
+                        <img
+                          height="20px"
+                          src="https://testffc.nimapinfotech.com/assets/media/task/TaskComplete.svg"
+                        />
+                      </IconButton>
+                    </Tooltip>
                   )}
                 </TableCell>
 
                 <TableCell component="td" className="cell">
                   {data.TaskStatus >= 0 && data.TaskStatus < 100 && (
-                    <IconButton
-                      onClick={() =>
-                        handlePartial(data.TaskId, data.TaskStatus)
-                      }
-                    >
-                      <img
-                        height="20px"
-                        src="https://testffc.nimapinfotech.com/assets/media/task/TaskPartialComplete.svg"
-                      />
-                    </IconButton>
+                    <Tooltip title="Partial Complete" placement="top" arrow>
+                      <IconButton
+                        onClick={() =>
+                          handlePartial(data.TaskId, data.TaskStatus)
+                        }
+                      >
+                        <img
+                          height="20px"
+                          src="https://testffc.nimapinfotech.com/assets/media/task/TaskPartialComplete.svg"
+                        />
+                      </IconButton>
+                    </Tooltip>
                   )}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
-          
         </Table>
       </TableContainer>
       <AddTask open={openDialogue} setOpen={(data) => setOpenDialogue(data)} />
-      <DeleteModal
+      {/* <DeleteModal
+
         open={openDeleteModal}
         setOpen={(data) => setOpenDeleteModal(data)}
-      />
+      /> */}
       {openPartialModal && (
         <PartialModal
           config={partialConfig}
@@ -492,8 +515,24 @@ const MyTasksList = () => {
         />
       )}
 
+      {openDeleteModal && (
+        <CompleteModal
+          heading="DELETE TASK"
+          MessageDisplay="Do you want to delete this Task?"
+          buttonName="Delete"
+          dispatchFun={(dataObject) => dispatch(deleteTask(dataObject))}
+          config={deleteConfig}
+          open={openDeleteModal}
+          setOpen={(data) => setOpenDeleteModal(data)}
+        />
+      )}
+
       {openCompleteModal && (
         <CompleteModal
+          heading="COMPLETE TASK"
+          MessageDisplay="Are you sure this Task is complete?"
+          dispatchFun={(dataObject) => dispatch(postStatus(dataObject))}
+          buttonName="Yes"
           config={completeConfig}
           open={openCompleteModal}
           setOpen={(data) => setOpenCompleteModal(data)}

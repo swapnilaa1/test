@@ -1,14 +1,19 @@
+import { Button, TextField } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { BASE_URL, SIGN_IN } from "../api/apiEndPoints";
 import { RequestAPi } from "../api/Request";
+import { atStart } from "../redux/atStartSlice";
 import { getMyTasks } from "../redux/myTasksSlice";
 import signInSlice, { signInUser } from "../redux/signInSlice";
+import "../style/pages.css";
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const list = useSelector((state) => state.mytasksReducer);
+  const data = useSelector((state) => state.startReducer.dataObj);
   const [obj1, setObj1] = useState({
     From: 1,
     To: 10,
@@ -45,9 +50,11 @@ const SignIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     // console.log("singined pressed");
     // signIn();
     dispatch(signInUser(credentials));
+    navigate("/dashboard");
   };
   //  console.log("list ", list);
   // console.log("credes", credentials);
@@ -64,26 +71,60 @@ const SignIn = () => {
     ToDueDate: "",
     SortByDueDate: "",
   };
+
+  useEffect(() => {
+    dispatch(atStart());
+  }, []);
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>Username</label>
-        <input
-          type="text"
-          name="Username"
-          value={credentials.Username}
-          onChange={handleChange}
+    <div className="row">
+      <div className="col-6">
+        <img
+          height="100%"
+          width="100%"
+          src="https://testffc.nimapinfotech.com/assets/media/login/login-page-slider3.jpg"
         />
-        <label>password</label>
-        <input
-          type="text"
-          name="Password"
-          value={credentials.Password}
-          onChange={handleChange}
-        />
-        <button type="submit">Submit</button>
-      </form>
-      <button onClick={() => dispatch(getMyTasks(obj1))}>My tasks</button>
+      </div>
+      <div className="col-6">
+        <div className="signup">
+          Don't have an account yet? <span>Sign Up</span>
+        </div>
+        <div className="logo-head">
+          <div className="logo">
+            <img src={data.WebAppGetStartedLogo} />
+          </div>
+          Get Started with BETA Field Force
+        </div>
+        <div className="login">
+          <form onSubmit={handleSubmit}>
+            <div style={{ width: "400px" }}>
+              <TextField
+                fullWidth
+                label="Username"
+                variant="standard"
+                type="text"
+                name="Username"
+                size="small"
+                value={credentials.Username}
+                onChange={handleChange}
+              />
+              <div>Error</div>
+            </div>
+            <div style={{ width: "400px" }}>
+              <TextField
+                fullWidth
+                label="Password"
+                variant="standard"
+                type="text"
+                name="Password"
+                value={credentials.Password}
+                onChange={handleChange}
+              />
+            </div>
+            <Button>Forgot Password</Button> <Button type="submit">Sign</Button>{" "}
+            OR <Button>Sign In With OTP</Button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,12 +1,13 @@
 import { Button, TextField } from "@mui/material";
 import { Field, Formik, Form } from "formik";
 import * as Yup from "yup";
-import React from "react";
+import React, { useEffect } from "react";
 import "../style/pages.css";
 import FormControl from "./FormControl";
 import { useDispatch, useSelector } from "react-redux";
 import { signInUser } from "../redux/signInSlice";
 import { useNavigate } from "react-router-dom";
+import { atStart } from "../redux/atStartSlice";
 
 const initialState = {
   Username: "",
@@ -30,6 +31,10 @@ const Login = () => {
     //console.log("handle submitted" , values);
     dispatch(signInUser(values));
   };
+
+  useEffect(() => {
+    dispatch(atStart());
+  }, []);
   //console.log("succcess" , success)
   return (
     <div className="row">

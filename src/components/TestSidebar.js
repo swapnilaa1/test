@@ -129,14 +129,14 @@ const data = [
   {
     id: 5,
     title: "Settings",
-    link: "/settings",
+    link: "/settings/test",
     source:
       "https://testffc.nimapinfotech.com/assets/media/sidebar/settingLogo.svg",
   },
 ];
 
 export default function MiniDrawer() {
-  const [selectedTitle , setSelectedTitle]=useState("Dashboard");
+  const [selectedTitle, setSelectedTitle] = useState("Dashboard");
   const navigate = useNavigate();
   const theme = useTheme();
   const [personAnchr, setPersonAnchr] = useState(null);
@@ -174,9 +174,8 @@ export default function MiniDrawer() {
     setPersonAnchr(null);
   };
 
-  const handleSidbar=(title)=>{
-    setSelectedTitle(title)
-
+  const handleSidbar = (title) => {
+    setSelectedTitle(title);
   };
 
   const Person = (
@@ -210,12 +209,12 @@ export default function MiniDrawer() {
               ...(!open && { display: "none" }),
             }}
           >
-            <MenuIcon fontSize="small"/>
+            <MenuIcon fontSize="small" />
           </IconButton>
-          <div style={{flexGrow:"1"}}>
-          <Typography variant="h6" noWrap component="div">
-            {selectedTitle}
-          </Typography>
+          <div style={{ flexGrow: "1" }}>
+            <Typography variant="h6" noWrap component="div">
+              {selectedTitle}
+            </Typography>
           </div>
           <div>
             <Button variant="h5">Time</Button>
@@ -234,7 +233,7 @@ export default function MiniDrawer() {
           </Grid>
         </Toolbar>
       </AppBar>
-      <Drawer  variant="permanent" open={open}>
+      <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           {open && (
             <div style={{ display: "flex" }}>
@@ -282,7 +281,7 @@ export default function MiniDrawer() {
                 <ListItemText
                   primary={text.title}
                   sx={{ opacity: open ? 1 : 0 }}
-                  onClick={()=>handleSidbar(text.title)}
+                  onClick={() => handleSidbar(text.title)}
                 />
               </ListItemButton>
             </ListItem>

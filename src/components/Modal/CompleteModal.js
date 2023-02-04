@@ -15,7 +15,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { postStatus } from "../../redux/postStatusUpdateSlice";
 import { getMyTasks } from "../../redux/myTasksSlice";
 
-const CompleteModal = ({ config, open, setOpen }) => {
+const CompleteModal = ({
+  config,
+  open,
+  setOpen,
+  heading,
+  MessageDisplay,
+  dispatchFun,
+  buttonName,
+}) => {
   // useImperativeHandle(ref, () => {
   //   return {
   //     press: () => {
@@ -29,23 +37,31 @@ const CompleteModal = ({ config, open, setOpen }) => {
 
   return (
     <Dialog open={open}>
-      <DialogTitle><h6 className="complteTitle">COMPLETE TASK</h6></DialogTitle>
+      <DialogTitle>
+        <h6 className="complteTitle">{heading}</h6>
+      </DialogTitle>
       <DialogContent dividers>
         <DialogContentText>
-        <div className="completeModal">Are you sure this Task is complete?</div>  
+          <div className="completeModal">{MessageDisplay}</div>
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpen(false)} size="small" variant="text">
-        <Typography sx={{fontSize:14 , textTransform:"capitalize" , color:"black"}}>Cancel</Typography>
+          <Typography
+            sx={{ fontSize: 14, textTransform: "capitalize", color: "black" }}
+          >
+            Cancel
+          </Typography>
         </Button>
         <Button
           size="small"
           variant="text"
-          onClick={() => dispatch(postStatus({data:config , fun:()=>setOpen()}))}
-        sx={{m:1 , mr:3}}
+          onClick={() => dispatchFun({ data: config, fun: () => setOpen() })}
+          sx={{ m: 1, mr: 3 }}
         >
-        <Typography sx={{fontSize:14 , textTransform:"capitalize"}}>Yes</Typography>
+          <Typography sx={{ fontSize: 14, textTransform: "capitalize" }}>
+            {buttonName}
+          </Typography>
         </Button>
       </DialogActions>
     </Dialog>

@@ -24,6 +24,7 @@ import {
   Menu,
   Collapse,
   Card,
+  Tooltip,
 } from "@mui/material";
 import {
   getMyTasks,
@@ -40,6 +41,8 @@ import "../style/pages.css";
 import { useEffect } from "react";
 import { useTransition } from "react";
 import { useRef } from "react";
+import AddTask from "./Modal/AddTask";
+//import { AddTask } from "@mui/icons-material";
 //import { TabContext, TabPanel } from "@mui/lab";
 
 const Mytask = () => {
@@ -50,6 +53,8 @@ const Mytask = () => {
   );
 
   const { Message } = useSelector((state) => state.postStatusUpdateReducer);
+  const deleteMessage = useSelector((state) => state.deleteTaskReducer.Message);
+  const [openDialogue, setOpenDialogue] = useState(false);
   // const {
   //   FromDueDate,
   //   ToDueDate,
@@ -345,6 +350,7 @@ const Mytask = () => {
     sendData.SortOrder,
     difference,
     Message,
+    deleteMessage,
   ]);
   // useEffect(() => {
   //   if (localData !== undefined) {
@@ -357,60 +363,82 @@ const Mytask = () => {
     console.log("ref", submitRef.current);
   };
 
-  
   return (
     <div>
-      <Grid
-        container
-        component="div"
-      
-        style={{ display: "flex", flexDirection: "row" }}
-      >
-       <div style={{flexGrow:"1"}}><Button variant="contained" onClick={openPerson} size="small">
-          Filter
-        </Button>{Person}</div> 
+      <div>
+        <Grid
+          container
+          component="div"
+          style={{ display: "flex", flexDirection: "row" }}
+        >
+          <div style={{ flexGrow: "1" }}>
+            <Tooltip title="Filter" placement="top" arrows>
+              <Button variant="contained" onClick={openPerson} size="small">
+                Filter
+              </Button>
+            </Tooltip>
+            {Person}
+          </div>
 
-        <div className="searchIp"><TextField
-        fullWidth
-        size="small"
-          label="Search"
-          variant="standard"
-          onChange={(e) => handleSearch(e)}
-          //onKeyPress={(e) => handle(e)}
-          sx={{mr:2}}
-        /></div>
-        
-        <div><Button onClick={() => handle()} sx={{mr:2}} variant="contained"  size="small">Add Task</Button>
-        <Button variant="contained" size="small">Export</Button></div>
-        
-     
-      </Grid>
-      <Box>
-        <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList
-              onChange={handleChange}
-              textColor="black"
-              indicatorColor="primary"
-            >
-              <Tab label="My Task" value="1" />
-              <Tab label="CC" value="2" />
-              <Tab label="Assigned By Me" value="3" />
-              <Tab label="Archive List" value="4" />
-              <Tab label="Calendar View" value="5" />
-            </TabList>
-          </Box>
-          <TabPanel value="1">
-            <MyTasksList ref={submitRef} />
-          </TabPanel>
-          <TabPanel value="2">
-            <SignIn />
-          </TabPanel>
-          <TabPanel value="3">panel three</TabPanel>
-          <TabPanel value="4">panel four</TabPanel>
-          <TabPanel value="5">panel five</TabPanel>
-        </TabContext>
-      </Box>
+          <div className="searchIp">
+            <TextField
+              fullWidth
+              size="small"
+              label="Search"
+              variant="standard"
+              onChange={(e) => handleSearch(e)}
+              //onKeyPress={(e) => handle(e)}
+              sx={{ mr: 2 }}
+            />
+          </div>
+
+          <div>
+            <Tooltip title="Add Task" placement="top" arrows>
+              <Button
+                sx={{ mr: 2 }}
+                variant="contained"
+                size="small"
+                onClick={() => setOpenDialogue(true)}
+              >
+                Add Task
+              </Button>
+            </Tooltip>
+            <Tooltip title="Export" placement="top" arrows>
+              <Button variant="contained" size="small">
+                Export
+              </Button>
+            </Tooltip>
+          </div>
+        </Grid>
+        <Box>
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <TabList
+                onChange={handleChange}
+                textColor="black"
+                indicatorColor="primary"
+              >
+                <Tab label="My Task" value="1" />
+                <Tab label="CC" value="2" />
+                <Tab label="Assigned By Me" value="3" />
+                <Tab label="Archive List" value="4" />
+                <Tab label="Calendar View" value="5" />
+              </TabList>
+            </Box>
+            <TabPanel value="1">
+              <MyTasksList ref={submitRef} />
+            </TabPanel>
+            <TabPanel value="2">
+              <SignIn />
+            </TabPanel>
+            <TabPanel value="3">panel three</TabPanel>
+            <TabPanel value="4">panel four</TabPanel>
+            <TabPanel value="5">panel five</TabPanel>
+          </TabContext>
+        </Box>
+      </div>
+
+      <AddTask open={openDialogue} setOpen={(data) => setOpenDialogue(data)} />
     </div>
   );
 };
