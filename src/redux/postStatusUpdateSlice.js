@@ -1,17 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { POST_UPDATE_TASK } from "../api/apiEndPoints";
+import { toast } from "react-toastify";
+import { ASSIGNTASK, POST_UPDATE_TASK } from "../api/apiEndPoints";
 import { RequestAPi } from "../api/Request";
+import { toastobj } from "../utility/toastobj";
 
 const initialState = {
   Message: "",
+  isPostLoading:false,
 };
 
 export const postStatus = createAsyncThunk(
   "poststatusupdate/postStatus",
   (data) => {
-    console.log("postStatus", data.data);
-    //return RequestAPi.post(GET_LEADS, data).then((response) => response);
     return RequestAPi.post(POST_UPDATE_TASK, data.data).then((response) => response);
+  }
+);
+
+export const addTask=createAsyncThunk(
+  "poststatusupdate/addTask",
+  (data)=>{
+    return RequestAPi.post(ASSIGNTASK , data.data).then((response) => response);
   }
 );
 const postStatusUpdateSlice = createSlice({
@@ -20,20 +28,34 @@ const postStatusUpdateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(postStatus.pending, (state) => {
-      //  state.loading = true;
-      // state.isAuth = false;
       state.Message = "";
+      state.isPostLoading=true;
     });
     builder.addCase(postStatus.fulfilled, (state, action) => {
-      console.log("actiom in post Status succes", action.payload  ,"arg" , action);
-      //const data = action.payload.data.data.TaskList;
-      //state.localData = data;
+      state.isPostLoading=false;
       state.Message = action.payload.data.Message;
       action.meta.arg.fun!==undefined && action?.meta?.arg?.fun(false)
+     const value= action.meta.arg.data.TaskStatusValue;
+     value===0?toast.success("Task Accepted" ,toastobj):value===100?toast.success("Task Updated as Completed" , toastobj):toast.success("Task Updated as Partially Completed" , toastobj)
+      
     });
     builder.addCase(postStatus.rejected, (state, action) => {
-      console.log("rejected post");
+      state.isPostLoading=false;
+      toast.error("Something Went Wrong" , toastobj);
     });
+
+    builder.addCase(addTask.pending,(state)=>{
+      state.isLoading=true;
+    });
+    builder.addCase(addTask.fulfilled,(state , action)=>{
+      state.isLoading=false;
+      toast.success("Task Added Successfully" , toastobj)
+    });
+    builder.addCase(addTask.rejected,(state)=>{
+      state.isLoading=false;
+      toast.error("Something Went Wrong");
+    });
+
   },
 });
 

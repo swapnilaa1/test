@@ -20,7 +20,16 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { Button, Grid, Menu, MenuItem } from "@mui/material";
+import { Avatar, Button, CircularProgress, Grid, Menu, MenuItem } from "@mui/material";
+import { toastobj } from "../utility/toastobj";
+import { toast } from "react-toastify";
+import DateTime from "./DateTime";
+import "./test.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getMyTasks } from "../redux/myTasksSlice";
+import { postGetTeams } from "../redux/postGetTeamsSlice";
+import { Stack } from "@mui/system";
+
 
 const drawerWidth = 240;
 
@@ -50,7 +59,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -135,8 +143,13 @@ const data = [
   },
 ];
 
-export default function MiniDrawer() {
-  const [selectedTitle, setSelectedTitle] = useState("Dashboard");
+export default function MiniDrawer({ setSelectedTitle, selectedTitle }) {
+  const dispatch = useDispatch();
+
+  const { tasksLoading, sendData ,isListFetching , } = useSelector(
+    (state) => state.mytasksReducer
+  );
+  const { isTeamLoading } = useSelector((state) => state.postTeamReducer);
   const navigate = useNavigate();
   const theme = useTheme();
   const [personAnchr, setPersonAnchr] = useState(null);
@@ -155,7 +168,8 @@ export default function MiniDrawer() {
   const handleSignOut = () => {
     closePerson();
     localStorage.clear();
-    navigate("/auth/login");
+    navigate("/login");
+    toast.success("User Logged Out", toastobj);
   };
 
   const handleDrawerOpen = () => {
@@ -189,139 +203,159 @@ export default function MiniDrawer() {
 
   React.useEffect(() => {
     if (!localStorage.getItem("token")) {
-      // navigate("/auth/login")
+       navigate("/login")
     }
   }, []);
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-              ...(!open && { display: "none" }),
-            }}
-          >
-            <MenuIcon fontSize="small" />
-          </IconButton>
-          <div style={{ flexGrow: "1" }}>
-            <Typography variant="h6" noWrap component="div">
-              {selectedTitle}
-            </Typography>
-          </div>
-          <div>
-            <Button variant="h5">Time</Button>
-            <Button variant="h5">Date</Button>
-            <Button color="secondary">Punch In</Button>
-          </div>
-          <Grid component="div" sx={resp}>
-            <Button color="secondary" onClick={openPerson}>
-              UserName
-            </Button>
-          </Grid>
-          <Grid component="div" sx={mobres}>
-            <IconButton onClick={openPerson}>
-              <MoreVertIcon />
+    <Box style={{}}>
+      <div
+        id="loader"
+        style={{
+          display: "none",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "20%",
+        }}
+      >
+        <div style={{}}>
+          <CircularProgress color="success" />
+        </div>
+      </div>
+
+      <div id="main_content" style={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar position="fixed" open={open} color="info" className="appbar1">
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 5,
+                ...(open && { display: "none" }),
+                ...(!open && { display: "none" }),
+              }}
+            >
+              <MenuIcon fontSize="small" />
             </IconButton>
-          </Grid>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          {open && (
-            <div style={{ display: "flex" }}>
-              <img
-                height="20px"
-                src="https://testffc.nimapinfotech.com/image/New%20Images/FFC/FFC-logo.png"
-                style={{ marginRight: "10px" }}
-              />
-              <Typography sx={{ marginRight: "8px" }}>
-                Beta Field Force
+            <div style={{ flexGrow: "1" }}>
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{ fontSize: 17, fontWeight: 500 }}
+              >
+                {selectedTitle}{" "}
+                <h4
+                  style={{
+                    display: "inline-block",
+                    marginLeft: "8px",
+                    opacity: "0.3",
+                    height: "fit-content",
+                  }}
+                >
+                  |
+                </h4>
               </Typography>
             </div>
-          )}
-          <IconButton onClick={!open ? handleDrawerOpen : handleDrawerClose}>
-            {!open ? (
-              <KeyboardDoubleArrowRightIcon fontSize="large" />
-            ) : (
-              <KeyboardDoubleArrowLeftIcon fontSize="large" />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List onMouseEnter={handleDrawerOpen}>
-          {data.map((text, index) => (
-            <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                component={Link}
-                to={text.link}
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
+            <div>
+              <DateTime />
+            </div>
+            <Grid component="div" sx={resp}>
+              <div
+              className="Username"
+                color="primary"
+                onClick={openPerson}
+                
               >
+                <Stack direction="row" spacing={1} sx={{mt:1 , ml:2}}>
+                <Avatar
+                  alt="Remy Sharp"
+                  src=""
+                  sx={{ width: 30, height: 30 }}
+                /><div style={{marginTop:"3px"}}>Swapnil Bhongale</div>
+                </Stack>
+                
+                
+              </div>
+            </Grid>
+            <Grid component="div" sx={mobres}>
+              <IconButton onClick={openPerson}>
+                <MoreVertIcon />
+              </IconButton>
+            </Grid>
+          </Toolbar>
+        </AppBar>
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader>
+            {open && (
+              <div style={{ display: "flex" }}>
                 <img
-                  style={{
-                    minWidth: "20px",
-                    marginRight: open ? "15px" : "auto",
-                    justifyContent: "center",
-                    height: "20px",
+                  height="20px"
+                  src="https://testffc.nimapinfotech.com/image/New%20Images/FFC/FFC-logo.png"
+                  style={{ marginRight: "12px" }}
+                />
+                <Typography
+                  sx={{ marginRight: "10px", fontSize: 12, fontWeight: "550" }}
+                >
+                  BETA FIELD FORCE
+                </Typography>
+              </div>
+            )}
+            <IconButton onClick={!open ? handleDrawerOpen : handleDrawerClose}>
+              {!open ? (
+                <KeyboardDoubleArrowRightIcon fontSize="large" />
+              ) : (
+                <KeyboardDoubleArrowLeftIcon fontSize="large" />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List onMouseEnter={handleDrawerOpen}>
+            {data.map((text, index) => (
+              <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  component={Link}
+                  to={text.link}
+                  sx={{
+                    minHeight: 48,
+                    fontSize: 21,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
-                  src={text.source}
-                />
+                >
+                  <img
+                    style={{
+                      minWidth: "20px",
+                      marginRight: open ? "15px" : "auto",
+                      justifyContent: "center",
+                      height: "20px",
+                    }}
+                    src={text.source}
+                  />
 
-                <ListItemText
-                  primary={text.title}
-                  sx={{ opacity: open ? 1 : 0 }}
-                  onClick={() => handleSidbar(text.title)}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        {/* <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography> */}
+                  <ListItemText
+                    primary={text.title}
+                    sx={{ opacity: open ? 1 : 0 }}
+                    onClick={() => handleSidbar(text.title)}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+        </Drawer>
+        <Box component="main" className="outlet_main">
+          <DrawerHeader />
 
-        <Outlet />
-      </Box>
-      {Person}
+          <Outlet />
+        </Box>
+        <br />
+        {Person}
+      </div>
     </Box>
   );
 }

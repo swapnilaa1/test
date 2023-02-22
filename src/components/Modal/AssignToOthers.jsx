@@ -1,5 +1,4 @@
 import { Button, TextField } from "@mui/material";
-// import { Button } from "bootstrap";
 import React from "react";
 
 const AssignToOthers = () => {
@@ -66,8 +65,8 @@ const AssignToOthers = () => {
 
           <div>
             <hr />
-            <Button>ADD</Button>
-            <Button>Cancel</Button>
+            <Button    sx={{height:27 ,fontSize:13 ,padding:1}}>ADD</Button>
+            <Button    sx={{height:27 ,fontSize:13 ,padding:1}}>Cancel</Button>
           </div>
         </div>
       </form>

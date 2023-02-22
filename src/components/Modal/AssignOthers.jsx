@@ -7,44 +7,58 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { Formik, Form } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
   useState,
 } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getLeads } from "../../redux/leadsSlice";
 import SelectUser from "./SelectUser";
 import * as Yup from "yup";
 import FormControl from "../FormControl";
+import "./modal.css";
+const titleReg=/^[A-za-z]{0,25}$/;
+
 
 const initialState = {
   Title: "",
   Address: "",
   Description: "",
   Multimedia: "",
-  LeadId: null,
+  LeadId: "",
   TaskEndDate: "",
   Priority: "",
   UserIds: "", // user having ids // set No of valuyes
-  TaskOwners: "", //cc array of object {UserId:200 , Name:"swapnil anil bhongale"} // set no of values
 };
 const form_validation = Yup.object().shape({
-  Title: Yup.string().required("Required"),
+  Title: Yup.string().required("Required")
+  .matches(titleReg, "Invalid title"),
   Description: Yup.string().required("Required"),
-  Multimedia: Yup.string().required("Required"),
-  UserIds: Yup.string().required("Required"),
-  TaskOwners: Yup.string().required("Required"),
-  //TaskEndDate: Yup.string().required("Required"),
-  Priority: Yup.string().required("Required"),
+  Address: Yup.string().required("Required"),
+  LeadId: Yup.string().required("Required"),
+   TaskOwners: Yup.string().required("Required"),
+  TaskEndDate: Yup.string().required("Required"),
+   Priority: Yup.string().required("Required"),
 });
 
-const AssignOthers = ({ submitForm, setOpen }) => {
-  // useImperativeHandle(ref, () => ({
-  //   handleSubmit1: () => {},
-  // }));
+const AssignOthers = ({ handleSubmit, error, setOpen }, ref) => {
+  const { localLeadData } = useSelector((state) => state.leadsReducer);
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        submitForm: () => {
+          document.getElementById("Add").click();
+        },
+      };
+    },
+    []
+  );
+  const [formikObj, setFormikObj] = useState(null);
   const [users1, setUsers1] = useState([]);
   const [usersCc, setUsersCc] = useState([]);
   const [usersIdObj, setUsersIdObj] = useState([]);
@@ -68,186 +82,160 @@ const AssignOthers = ({ submitForm, setOpen }) => {
     setPriority(e.target.value);
   };
 
-  const handleMultimedia = (baseString, mediaName, mediaExtention) => {
-    console.log("all 3 in handle", baseString, mediaName, mediaExtention);
+  const handleMultimedia = (
+    baseString,
+    mediaName,
+    mediaExtention,
+    MultimediaType
+  ) => {
     setMediaObject({
       MultimediaData: baseString,
       MultimediaFileName: mediaName,
       MultimediaExtension: mediaExtention,
-      MultimediaType: "",
+      MultimediaType: MultimediaType,
     });
   };
 
-  const handleSubmit = (values) => {
-    // send users1 and usersCc as
-    console.log("values while sbmitting", values);
+  const handleSubmitLocal = (values) => {
+    handleSubmit(values, MediaObject, users1, usersCc, usersCcValue);
   };
-  console.log("media object", MediaObject);
+
+  
+
   useEffect(() => {
     dispatch(getLeads());
   }, []);
-  //  console.log("users ", users1, usersCc);
+
   return (
-    <div>
+    <div className="form-assign"
+     >
+    
       <Formik
         initialValues={initialState}
         validationSchema={form_validation}
-        onSubmit={submitForm}
+        onSubmit={handleSubmitLocal}
       >
         {(formik) => {
-          console.log("values", formik.values);
+
           return (
             <Form>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <FormControl control="input" name="Title" label="Title" />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControl
-                    control="input"
-                    name="Description"
-                    label="Description"
-                  />
-                </Grid>
+              <div>
+                <Grid component="div" className="top-grid" container>
+                  <Grid item xs={12} className="after-top">
+                    <FormControl control="input" name="Title" label="Title" setFun={(data)=>formik.setFieldValue("Title", data)}/>
+                  </Grid>
+                  <Grid item xs={12} className="innner-after">
 
-                <Grid container>
-                  <Grid item xs={12}>
                     <FormControl
-                      control="file"
-                      name="Multimedia"
-                      label="Attach File"
-                      setFun={(data) =>
-                        formik.setFieldValue("Multimedia", data)
-                      }
-                      setFun1={(data) => formik.setFieldValue("Address", data)}
-                      handleMultimedia={(data, name, extention) =>
-                        handleMultimedia(data, name, extention)
-                      }
+                      control="input"
+                      name="Description"
+                      label="Description"
+                      setFun={(data)=>formik.setFieldValue("Description" ,data )}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+
+                  <Grid container>
+                    <Grid item xs={12} className="grid-line" >
+                      <FormControl
+                        control="file"
+                        name="Multimedia"
+                        label="Attach File"
+                        setFun={(data) =>
+                          formik.setFieldValue("Multimedia", data)
+                        }
+                        setFun1={(data) =>
+                          formik.setFieldValue("Address", data)
+                        }
+                        handleMultimedia={(
+                          data,
+                          name,
+                          extention,
+                          MultimediaType
+                        ) =>
+                          handleMultimedia(
+                            data,
+                            name,
+                            extention,
+                            MultimediaType
+                          )
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12} className="grid-line" >
+                      <FormControl
+                        control="Address"
+                        name="Address"
+                        label="Attach File"
+                      value={formik.values.Address}
+                      setFun={() => formik.setFieldValue("Address","" )}
+                      setFun2={() => formik.setFieldValue("Multimedia", "")}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid item xs={6} className="grid-line" >
                     <FormControl
-                      control="Address"
-                      name="Address"
-                      label="Attach File"
+                      control="Priority"
+                      checkFor="LeadId"
+                      name="LeadId"
+                      label="Lead/Customer Name"
+                      data={localLeadData}
+                      setFun={(data) => formik.setFieldValue("LeadId", data)}
+                    />
+                  </Grid>
+                  <Grid item xs={6} className="grid-line" >
+                    <FormControl
+                      control="date"
+                      name="TaskEndDate"
+                      label="Select Due Date"
+                      setFun={(data) => {
+                        return formik.setFieldValue("TaskEndDate", data);
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={6} className="grid-line" >
+                    <FormControl
+                      control="Priority"
+                      name="Priority"
+                      label="Select Priority"
+                    />
+                  </Grid>
+                  <Grid item xs={12} className="grid-line zind" >
+                    <FormControl
+                   
+                      control="users"
+                      name="TaskOwners"
+                      label="Add CC Members"
+                      userName="userCc"
+                      users={usersCc}
+                      usersIdObj={usersIdObj}
+                      setUsersIdObj={(data) => setUsersIdObj(data)}
+                      setUsersCc={setUsersCc}
+                      openAddUser={openAddCc}
+                      setUserCount={
+                        (data) => formik.setFieldValue("TaskOwners", data)
+                      }
+                      setOpenAddUser={(data) => setOpenAddCc(data)}
+
                     />
                   </Grid>
                 </Grid>
+              </div>
 
-                <Grid item xs={6}>
-                  Lead Customer name
-                  {/* <TextField
-                    placeholder="none"
-                    type="date"
-                    fullWidth="true"
-                    variant="standard"
-                  /> */}
-                </Grid>
-                <Grid item xs={6}>
-                  <FormControl
-                    control="date"
-                    name="TaskEndDate"
-                    label="Select Due Date"
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  Priority
-                  <FormControl
-                    control="Priority"
-                    name="Priority"
-                    label="Select Priority"
-                    setFun={(data) => formik.setFieldValue("Priority", data)}
-                  />
-                </Grid>
-                {/* <Grid item xs={12}>
-                  <FormControl
-                    control="users"
-                    name="UserIds"
-                    label="Add Users"
-                    setOpenAddUser={(data) => setOpenAddUser(data)}
-                    // value={users1Value}
-                    // userCount={usersCcValue}
-                    setFun={(data) =>
-                      formik.setFieldValue("UserIds", `${users1Value} Users`)
-                    }
-                  />
-                </Grid> */}
-                <Grid item xs={12}>
-                  <FormControl
-                    control="users"
-                    name="TaskOwners"
-                    label="Add CC Members"
-                    setOpenAddUser={(data) => setOpenAddCc(data)}
-                    // value={usersCcValue}
-                  />
-                </Grid>
-              </Grid>
               <div className="buttonDiv">
-                <hr />
-                <Button>Add</Button>{" "}
-                <Button onClick={() => setOpen(false)}> Cancel</Button>
+             
+                <Button className="btnAdd"
+                 id="Add" type="submit">
+                  Add
+                </Button>{" "}
               </div>
             </Form>
           );
         }}
       </Formik>
-      {/* <Box component="form">
-        <TextField fullWidth label="Title" variant="standard" />
-        <TextField fullWidth label="Description" variant="standard" />
-        <TextField fullWidth label="Attach File" variant="standard" />
-        <TextField label="Lead Customer Name" variant="standard" />
 
-        <TextField label="Select Due Date" variant="standard" />
-
-        <TextField
-          label="Select Priority"
-          variant="standard"
-          select
-          value={Priority}
-          onChange={handleChange}
-          fullWidth
-          size="small"
-        >
-          <MenuItem value="High">Hign Priority</MenuItem>
-          <MenuItem value="Low">Low Priority</MenuItem>
-        </TextField>
-        <TextField
-          fullWidth
-          label="Add Users"
-          variant="standard"
-          onClick={() => setOpenAddUser(true)}
-        />
-        <TextField
-          fullWidth
-          label="Add CC Members"
-          variant="standard"
-          InputProps={{
-            readOnly: true,
-          }}
-          value={usersCc.length !== 0 ? `${usersCc.length} Users` : ""}
-          onClick={() => setOpenAddCc(true)}
-        />
-      </Box> */}
-      <SelectUser
-        userName="userId"
-        users={users1}
-        setUsers={setUsers1}
-        openAddUser={openAddUser}
-        setOpenAddUser={(data) => setOpenAddUser(data)}
-        setUserCount={(data) => setUsers1Value(data)}
-      />
-      <SelectUser
-        userName="userCc"
-        users={usersCc}
-        usersIdObj={usersIdObj}
-        setUsersIdObj={(data) => setUsersIdObj(data)}
-        setUsersCc={setUsersCc}
-        openAddUser={openAddCc}
-        setUserCount={(data) => setUsersCcValue(data)}
-        setOpenAddUser={(data) => setOpenAddCc(data)}
-      />
     </div>
   );
 };
 
-export default AssignOthers;
+export default forwardRef(AssignOthers);

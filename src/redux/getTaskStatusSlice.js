@@ -1,16 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import { GET_TASK_STATUS_FOR_PARTIAL } from "../api/apiEndPoints";
 import { RequestAPi } from "../api/Request";
+import { toastobj } from "../utility/toastobj";
 
 const initialState = {
   statusMaster: [],
+  isTaskStatusLoading:false,
 };
 
 export const getTaskStatus = createAsyncThunk(
   "getTask/getTaskStatus",
   (data) => {
-    //console.log("data in getleads", data);
-    //return RequestAPi.post(GET_LEADS, data).then((response) => response);
     return RequestAPi.get(GET_TASK_STATUS_FOR_PARTIAL).then(
       (response) => response
     );
@@ -24,14 +25,15 @@ const getTaskStatusSlice = createSlice({
     builder.addCase(getTaskStatus.pending, (state) => {
       state.loading = true;
       state.isAuth = false;
+      state.isTaskStatusLoading=true;
     });
     builder.addCase(getTaskStatus.fulfilled, (state, action) => {
-      console.log("actiom in post Status succes", action.payload);
-      //const data = action.payload.data.data.TaskList;
       state.statusMaster = action.payload.data.data;
+      state.isTaskStatusLoading=false;
     });
     builder.addCase(getTaskStatus.rejected, (state, action) => {
-      console.log("rejected post");
+      state.isTaskStatusLoading=false;
+      toast.error("Something Went Wrong" , toastobj);
     });
   },
 });

@@ -18,14 +18,9 @@ const Ffc = () => {
       navigate("/auth/login");
     }
   }, []);
-  // console.log("object")
   return (
     <div>
-      {/* <Grid container >
-            <Grid item xs={6} ><div>Hello</div><button style={{position :"fixed" , top:"300px" , right:"500px"} }>Click</button></Grid>
-            <Grid item xs={6} ><Navbar/></Grid>
-    </Grid>     
-    */}
+      
       <MiniDrawer />
       <Outlet />
     </div>

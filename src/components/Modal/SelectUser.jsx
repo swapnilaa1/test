@@ -1,61 +1,31 @@
-//import { CheckBox } from "@mui/icons-material";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  MenuItem,
-  TextField,
-  Checkbox,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { LoadingButton } from "@mui/lab";
+import SaveIcon from '@mui/icons-material/Save';
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, List, ListItem, ListItemButton, ListItemText, TextField, Checkbox, CircularProgress} from "@mui/material";
+import React, { useEffect, useState, useTransition } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCompMembers } from "../../redux/companyMemberSlice";
+import "./modal.css";
 
-const SelectUser = ({
-  openAddUser,
-  setOpenAddUser,
-  users,
-  setUsers,
-  setUsersCc,
-  userName,
-  usersIdObj,
-  setUsersIdObj,
-  setUserCount,
-}) => {
-  //const [users, setUsers] = useState([]);
+const SelectUser = ({ openAddUser,  setOpenAddUser,  users,  setUsers,  setUsersCc,  userName,  usersIdObj,  setUsersIdObj,  setUserCount,}) => {
+  
+  const [isPending , startTransition]= useTransition();
+  const[search , setSearch]=useState("");
   const [count, setCount] = useState("1");
-  //const [count, setCount] = useState("1");
 
   const data = useSelector(
     (state) => state.companyMemberReducers.localCompanyData
   );
-  // console.log("data in select user", data);
+  const { isGetMemberLoading} =useSelector(state=>state.companyMemberReducers)
+  
   const dispatch = useDispatch();
-  // console.log("users in ", users);
 
   const handleChange = (e, element) => {
-    // console.log("elem", users, element.UserId);
-    // console.log("due to handle Click", e, element);
-
-    //setUsers(e.target.value);
-
     if (userName === "userId") {
       const index = users.indexOf(element.UserId);
       if (index === -1) {
         setUsers([...users, element.UserId]);
       } else {
         let newAr = users.filter((user) => {
-          //  console.log("user", user, element.UserId);
           return user !== element.UserId;
         });
         setUsers(newAr);
@@ -75,7 +45,6 @@ const SelectUser = ({
       }
     }
   };
-  console.log("users", users);
 
   const handleClick = () => {
     users.length !== 0
@@ -84,20 +53,32 @@ const SelectUser = ({
     setOpenAddUser(false);
   };
 
+  const handleSearch=(e)=>{
+    setSearch(e.target.value);
+    
+      startTransition(()=>{
+        dispatch(getCompMembers(search));
+      })
+  }
+
+
   useEffect(() => {
-    dispatch(getCompMembers());
+    dispatch(getCompMembers(search));
   }, []);
   return (
     <Dialog open={openAddUser}>
+     
       <DialogTitle>Members</DialogTitle>
-      <DialogContent dividers>
-        <DialogContentText>
-          <TextField variant="standard" label="Search" fullWidth />
+     
+      <DialogContent className="dcontent" dividers >
+      { !isGetMemberLoading ? <DialogContentText>
+          <TextField variant="standard" label="Search" fullWidth value={search} onChange={handleSearch}/>
           <List>
-            {data?.map((element, index) => (
+          { data===undefined ?  <p className="no-data">No Data Found</p>: <div>
+              {data?.map((element, index) => (
               <ListItem
                 key={element.UserId}
-                // secondaryAction={<Checkbox checked={false} />}
+             
               >
                 <ListItemButton onClick={(e) => handleChange(e, element)}>
                   <ListItemText primary={element.Name} />
@@ -110,34 +91,18 @@ const SelectUser = ({
                   />
                 </ListItemButton>
               </ListItem>
-            ))}
+            ))}</div>} 
           </List>
-          <FormControl>
-            <FormGroup>
-              {/* {data?.map((element, index) => (
-                <FormControlLabel
-                  label={element.Name}
-                  control={
-                    <CheckBox
-                      //checked={users.includes(element.UserId)}
-                      checked={false}
-                      value={element.UserId}
-                      onChange={handleChange}
-                    />
-                  }
-                />
-              ))} */}
-            </FormGroup>
-          </FormControl>
-        </DialogContentText>
+          
+        </DialogContentText>:<div className="circular" >
+          <CircularProgress/></div> }
+        
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={() => setOpenAddUser(false)}>
+        <Button className="cancelb" variant="contained" color="primary" onClick={() => setOpenAddUser(false)}   >
           Cancel
         </Button>
-        <Button variant="contained" onClick={() => handleClick()}>
-          Add
-        </Button>
+        <LoadingButton className="cancelb" size="small" onClick={() => handleClick()}  loading={isGetMemberLoading} variant="contained" color="primary"  loadingPosition="end" endIcon={ isGetMemberLoading? < SaveIcon/> :""}>Add</LoadingButton>
       </DialogActions>
     </Dialog>
   );

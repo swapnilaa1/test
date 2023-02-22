@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { act } from "react-dom/test-utils";
 import { GET_MY_TASKS, SIGN_IN } from "../api/apiEndPoints";
 import { RequestAPi } from "../api/Request";
+import { toast } from "react-toastify";
+import { toastobj } from "../utility/toastobj";
+
 
 const initialState = {
   sendData: {
@@ -18,44 +22,59 @@ const initialState = {
     SortColumn: "",
     SortOrder: "",
   },
+  isListFetching:false,
+  tasksLoading:true,
+  isError:false,
   difference: 10,
   toToDisplay: 1,
   localData: [],
   count: "",
   rightCalled: false,
   leftCalled: false,
+  dueToPaginatio:false,
+  isPaginationLoading:false,
 };
 
 export const getMyTasks = createAsyncThunk("mytask/getMyTasks", (data) => {
-  console.log("data in action", data);
   return RequestAPi.post(GET_MY_TASKS, data).then((response) => response);
 });
 const myTasksSlice = createSlice({
   name: "mytask",
   initialState,
   reducers: {
+    isDueToPaginatio:(state)=>{
+      state.dueToPaginatio=true;
+    },
     setEndFromAndTo: (state, action) => {
+      state.dueToPaginatio=true
       state.rightCalled = true;
       state.sendData.From = parseInt(state.count / state.difference) * 10 + 1;
-      console.log("from", state.sendData.From);
       state.sendData.To = state.count;
     },
     setStartFromAndTo: (state, action) => {
+      state.dueToPaginatio=true;
       state.leftCalled = true;
       state.sendData.From = 1;
       state.sendData.To = state.difference;
     },
     setDifference: (state, action) => {
+      state.dueToPaginatio=true;
       state.difference = action.payload;
-      state.sendData.To = state.sendData.From - 1 + state.difference;
+      if((state.sendData.From /state.difference)>=1){
+          state.sendData.From=state.difference*Math.floor(state.sendData.From /state.difference)+1 
+      }else{
+        state.sendData.From=1;
+      }
+      state.sendData.To=state.sendData.From+state.difference-1
+
+      
+
     },
     setFromAndTo: (state, action) => {
+      state.dueToPaginatio=true;
       if (action.payload.direction === "ltr") {
-        console.log("in ltr");
         state.sendData.From = state.sendData.To + 1;
-        console.log("from data checked");
         state.sendData.To = state.sendData.From + state.difference - 1;
-        console.log("to data checked", state.sendData.To);
       } else {
         if (Math.sign(state.sendData.From - 1 - state.difference) !== -1) {
           state.sendData.To = state.sendData.From - 1;
@@ -64,13 +83,10 @@ const myTasksSlice = createSlice({
           state.sendData.To = state.sendData.From - 1;
           state.sendData.From = 1;
         }
-        // state.sendData.From = state.sendData.To + 1;
-        // state.sendData.To = state.difference + state.difference;
+     
       }
     },
-    // setTo: (state, action) => {
-    //   state.sendData.To = action.payload.To;
-    // },
+   
     setTOTODisplay: (state, action) => {},
     setSortData: (state, action) => {
       state.sendData.SortColumn = action.payload.column;
@@ -78,12 +94,29 @@ const myTasksSlice = createSlice({
     },
 
     setTitle: (state, action) => {
-      console.log("action payload in ste title", action.payload);
       state.sendData.Title = action.payload;
     },
 
+    setSearch:(state , action)=>{
+      if(action.payload==="All"){
+        state.sendData.FromDueDate = "";
+        state.sendData.ToDueDate = "";
+        state.sendData.Priority ="" ;
+        state.sendData.TaskStatus ="";
+      }else if(action.payload==="TaskStatus"){
+        state.sendData.TaskStatus ="";
+      }else if(action.payload==="Priority"){
+        state.sendData.Priority ="" ;
+      }else if(action.payload==="FromDueDate"){
+        state.sendData.FromDueDate = "";
+        state.sendData.ToDueDate = "";
+      }
+
+
+      
+    },
+
     setSearchParams: (state, action) => {
-      console.log("action payload while setting params", action.payload);
       state.sendData.FromDueDate = action.payload.FromDueDate;
       state.sendData.ToDueDate = action.payload.ToDueDate;
       state.sendData.UserIds = action.payload.userIds;
@@ -94,16 +127,23 @@ const myTasksSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getMyTasks.pending, (state) => {
-      state.loading = true;
-      state.isAuth = false;
+      state.isListFetching=true;
+      state.tasksLoading = true;
+      if(state.dueToPaginatio){
+          state.isPaginationLoading=true;
+      }
+  
     });
     builder.addCase(getMyTasks.fulfilled, (state, action) => {
-      console.log("actiom in my task success", action.payload);
+      state.isListFetching=false;
+      if(state.dueToPaginatio){
+        state.isPaginationLoading=false;
+        state.dueToPaginatio=false;
+    }
+      state.tasksLoading=false;
       const data = action.payload.data.data.TaskList;
       state.localData = data;
       state.count = action.payload.data.data.TotalCount;
-      console.log("state count", state.count);
-      //state.toToDisplay=localData.le
 
       if (state.count < state.sendData.To && !state.rightCalled) {
         state.toToDisplay = state.count;
@@ -117,14 +157,10 @@ const myTasksSlice = createSlice({
       }
       state.rightCalled = false;
 
-      // action.meta.arg[1]("/dashboard");
     });
     builder.addCase(getMyTasks.rejected, (state, action) => {
-      // state.loading = false;
-      // state.isAuth = false;
-      // state.isLoggedIn = false;
-      // console.log("error action in rejected", action);
-      //state.error = action.error.message;
+      state.isListFetching=false;
+      toast.error("Something Went Wrong" , toastobj)
     });
   },
 });
@@ -138,6 +174,8 @@ export const {
   setSearchParams,
   setEndFromAndTo,
   setStartFromAndTo,
+  setSearch,
+  isDueToPaginatio,
   // setFrom,
   // setTo,
   setTOTODisplay,

@@ -1,0 +1,55 @@
+.selectop{
+    height: 200px;
+}
+.multiselect {
+    width: inherits;
+  }
+  
+  .selectBox {
+    /* position: relative; */
+  }
+  
+  #one{
+    display: none;
+  }
+
+  .selectBox select {
+   
+    position: absolute;
+    width: 94%;
+    font-weight: bold;
+    /* top: 20px; */
+    bottom: 47px;
+    size: a4;
+    /* opacity: 0; */
+    z-index: 2;
+    }
+  .selectBox input{
+    width: 420px;
+  }
+  .overSelect {
+    /* position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0; */
+  }
+  
+  #checkboxes {
+    display: block;
+    position: absolute;
+    border: 1px #dadada solid;
+    background-color: white;
+    z-index: 2;
+    width: inherit;
+    height: 120px;
+    overflow: auto;
+  }
+  
+  #checkboxes label {
+    display: block;
+  }
+  
+  #checkboxes label:hover {
+    background-color: #1e90ff;
+  }

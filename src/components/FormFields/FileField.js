@@ -19,25 +19,18 @@ const FileField = ({
     fullWidth: true,
     variant: "standard",
   };
-  //   if (meta && meta.touched && meta.error) {
-  //     configText.error = true;
-  //     configText.helperText = meta.error;
-  //   }
+ 
 
   const handleFile = async (e) => {
     const file = e.target.files[0];
     const newAr = e.target.files[0].name.split(".");
-    // console.log("new Arr", newAr);
     const Extention = newAr[newAr.length - 1];
+    const MultimediaType= Extention==="pdf"?"D":"I";
     const filsplice = newAr.slice(0, newAr.length - 1);
     const FileName = filsplice.join("");
     const baseString = await convertFileBase(file);
-    // console.log("file name ", FileName);
-    // console.log("Extention", Extention);
-    //console.log("event ", e.target.files);
-    //`console.log("baseString", baseString);
     setFilesrc(baseString);
-    handleMultimedia(baseString, FileName, Extention);
+    handleMultimedia(baseString, FileName, Extention , MultimediaType);
   };
 
   const convertFileBase = (file) => {
@@ -56,21 +49,22 @@ const FileField = ({
   };
   return (
     <div>
-      <FastField name="MultimediaData" className="form-control">
+      <FastField name="MultimediaData" className="">
         {(props) => {
           const { field, form, meta } = props;
-          //console.log("props in fast field", props);
 
           return (
             <div>
               <TextField
+              required
                 style={{
-                  zIndex: "100",
+                  position:"relative",
+                  top:"0px",
+                  zIndex: 97,
                   opacity: "0",
                 }}
                 type="file"
-                className="form-control"
-                //   {...otherProps}
+                className=""
                 fullWidth
                 variant="standard"
                 label="Attach File"
@@ -78,8 +72,6 @@ const FileField = ({
                   handleFile(e);
                   setFun1(e.target.files[0].name);
                   setFun(e.target.files[0].name);
-
-                  //formik.setFieldValue("Address", e.target.files[0].name);
                 }}
               />
             </div>
@@ -88,17 +80,7 @@ const FileField = ({
       </FastField>
     </div>
 
-    // <TextField
-    //   type="file"
-    //   {...configText}
-    //   onChange={(e) => {
-    //     handleFile(e);
-    //     setFun(e.target.files[0].name);
-    //     //    formik.setFieldValue(name, e.target.files[0].name);
-    //     //console.log("Swapnil");
-    //     //formik
-    //   }}
-    // />
+    
   );
 };
 

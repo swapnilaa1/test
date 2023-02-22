@@ -1,5 +1,4 @@
 .display{
-    border: ;
 position:fixed ;
 bottom:20px;
   z-index: 1;
@@ -8,4 +7,14 @@ bottom:20px;
 
 .display2{
     z-index: 2;
+}
+
+.list_div{
+  display: none;
+  position: absolute;
+  top: 0px;
+  background-color:white;
+  z-index: 1;
+  height: 200px;
+  overflow: hidden;
 }

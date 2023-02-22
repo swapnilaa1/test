@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  LinearProgress,
   Tab,
   Typography,
 } from "@mui/material";
@@ -24,19 +25,15 @@ const CompleteModal = ({
   dispatchFun,
   buttonName,
 }) => {
-  // useImperativeHandle(ref, () => {
-  //   return {
-  //     press: () => {
-  //       setOpen(false);
-  //     },
-  //   };
-  // });
+ 
+  const {isPostLoading} =useSelector(state=>state.postStatusUpdateReducer);
+  const {isDeleting}=useSelector(state=>state.deleteTaskReducer)
   const dispatch = useDispatch();
   const { Message } = useSelector((state) => state.postStatusUpdateReducer);
-  console.log("open ", config);
 
   return (
     <Dialog open={open}>
+     {(isDeleting || isPostLoading )&& <div> <LinearProgress /></div>}  
       <DialogTitle>
         <h6 className="complteTitle">{heading}</h6>
       </DialogTitle>
@@ -46,7 +43,7 @@ const CompleteModal = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpen(false)} size="small" variant="text">
+        <Button onClick={() => setOpen(false)} size="small" variant="text"    sx={{height:27 ,fontSize:13 ,padding:1}}>
           <Typography
             sx={{ fontSize: 14, textTransform: "capitalize", color: "black" }}
           >
@@ -56,8 +53,9 @@ const CompleteModal = ({
         <Button
           size="small"
           variant="text"
+          color="primary"
           onClick={() => dispatchFun({ data: config, fun: () => setOpen() })}
-          sx={{ m: 1, mr: 3 }}
+          sx={{height:27 ,fontSize:13 ,padding:1 ,m:1 , mr:3}}
         >
           <Typography sx={{ fontSize: 14, textTransform: "capitalize" }}>
             {buttonName}

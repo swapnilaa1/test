@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import { SIGN_IN } from "../api/apiEndPoints";
 import { RequestAPi } from "../api/Request";
+import {toastobj} from "../utility/toastobj";
 
 const initialState = {
   currentUse: {},
@@ -11,12 +13,14 @@ const initialState = {
   token: "",
   data: [],
   success:"",
+  sign:false,
+  toastMsg:"",
+  errormessage:"",
   
 };
 
 export const signInUser = createAsyncThunk("signIn/signInUser", (data) => {
-  console.log("data in action", data);
-  return RequestAPi.post(SIGN_IN, {Username:"8113899206" , Password:"12345678"}).then((response) => response);
+  return RequestAPi.post(SIGN_IN, data.data).then((response) => response);
 });
 const signInSlice = createSlice({
   name: "signIn",
@@ -28,28 +32,31 @@ const signInSlice = createSlice({
       state.isAuth = false;
     });
     builder.addCase(signInUser.fulfilled, (state, action) => {
-      console.log("action in sign in  " , action)
-      console.log("action pay load in sign", action.payload.data.userId);
-      state.success=action.payload.success;
+      state.errormessage=action.payload.data.errormessage||"";
+      state.success=action.payload.data.success;
       localStorage.setItem("userId", action.payload.data.userId);
       localStorage.setItem(
         "token",
         "Basic " +
-          btoa(action.meta.arg.Username + ":" + action.meta.arg.Password)
+          btoa(action.meta.arg.data.Username + ":" + action.meta.arg.data.Password)
       );
-      state.token=localStorage.getItem("token")
-      // setTimeout(()=>{
-      //   action.meta.arg.navigate("/dashboard");
-      // } ,4000)
+      state.token=localStorage.getItem("token");
       
-      //console.log("action.meta.arg", action.meta.arg);
+     
+       if(!action.payload.data.success){
+        state.loading=false
+        toast.error("Wrong Credential" ,toastobj )
+      } else{
+        state.loading=false
+        toast.success('Logged In Successfully',toastobj);
+        action.meta.arg.navigate("/dashboard");
+      }
+   
     });
     builder.addCase(signInUser.rejected, (state, action) => {
       state.loading = false;
       state.isAuth = false;
       state.isLoggedIn = false;
-      console.log("error action in rejected", action);
-      //state.error = action.error.message;
     });
   },
 });

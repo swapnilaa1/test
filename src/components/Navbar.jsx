@@ -1,35 +1,19 @@
 import { AppBar, Button,  Grid,  IconButton,  Menu,  MenuItem,  ThemeProvider,  Toolbar, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-//import { makeStyles } from "@mui/material/styles";
 import theme from "./Theme";
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-
-// const useStyles = makeStyles((theme) => ({
-//   navClass: {
-//     display: "none",
-//   },
-// }));
-
-
-// const useStyles=makeStyles(theme=>({
-//   sectionDesktop:{
-//    display:"none",
-//    [theme.breakpoints.up("md")]:{
-//     display:"flex"
-//    },
-//   }
-// }))
+import { toast } from "react-toastify";
+import { toastobj } from "../utility/toastobj";
 
 const Navbar = () => {
 const navigate=useNavigate()
 const {token}=useSelector(state=>state.signInReducer)
  const[personAnchr ,setPersonAnchr ]= useState(null)
  const isPersonOPen=Boolean(personAnchr)
-  // const classes=useStyles();
   const resp={
     display:{md:"flex" , xs:"none"  , sm:"none"}
   }
@@ -49,7 +33,8 @@ setPersonAnchr(e.currentTarget)
   const handleSignOut=()=>{
   closePerson()
   localStorage.clear();
-  navigate("/auth/login")
+  navigate("/login");
+  toast.success("User Logged Out" , toastobj)
   }
 
 
@@ -70,10 +55,10 @@ setPersonAnchr(e.currentTarget)
         <div>
         <Button variant="h5">Time</Button>
         <Button variant="h5">Date</Button>
-        <Button color="secondary">Punch In</Button>
+        <Button color="primary"   sx={{height:27 ,fontSize:13 ,padding:1}}>Punch In</Button>
         </div>
         <Grid component="div" sx={resp}>
-        <Button color="secondary" onClick={openPerson}>UserName</Button>
+        <Button color="primary" onClick={openPerson}    sx={{height:27 ,fontSize:13 ,padding:1}}>UserName</Button>
         </Grid>
         <Grid component="div" sx={mobres}>
           <IconButton onClick={openPerson}>

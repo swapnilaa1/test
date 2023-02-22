@@ -1,0 +1,86 @@
+.appbar1 {
+  border-bottom: 0.1px solid rgb(107, 105, 105, 0.2);
+}
+.navgrid {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 0.1px solid rgb(107, 105, 105, 0.2);
+  position: relative;
+  /* bottom: px; */
+  margin-left: 20px;
+  left: -10px;
+  padding-top: 15px;
+
+  height: 58px;
+  width: 102%;
+  padding-right: 22px;
+  /* right: 0PX; */
+  padding-left: 12px;
+  width: inherit;
+  /* background-color: brown; */
+}
+.mui_button {
+  margin-right: 20px;
+  margin-right:15px;
+  height:27px;font-size:13px;padding:1px;
+}
+.outlet_main {
+  flex-grow: 1;
+  background-color: rgb(155, 155, 155, 0.2);
+}
+.tabhead {
+  font-size: 10px;
+  border: 1px solid red;
+}
+.filter_div1 {
+  margin: 10px;
+  width: 450px;
+  height: 400px;
+  /* border: 1px solid; */
+  box-shadow: 4px 2px 6px rgb(93, 92, 93);
+}
+.buttonDiv {
+  margin-right: 15px;
+  display: flex;
+  flex-direction: row-reverse;
+  height: 15px;
+  font-weight: 700;
+}
+.buttonDiv3 {
+  display: flex;
+  flex-direction: row-reverse;
+  /* background-color: red; */
+  height: 30px;
+}
+
+.text_f .menu_containt {
+  border-bottom: 0.5px solid rgb(162, 54, 54);
+}
+.Username {
+  height: 45px;
+  width: 170px;
+  font-size: 13px;
+  padding: opx;
+  color: white;
+  background-color: rgb(118, 143, 200);
+}
+.time-div {
+  font-size: 15px;
+  padding: 5px;
+}
+.disp-time {
+  display: inline-block;
+  margin-left: 8px;
+  opacity: 0.3;
+  height: fit-content;
+}
+.disp-day {
+  font-size: 15px;
+  padding: 5px;
+}
+.button-pad{
+
+}
+.btn-filter-content{
+  height:27px;font-size:13px;padding:1px;margin-right:15px;
+}

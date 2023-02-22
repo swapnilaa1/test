@@ -1,0 +1,76 @@
+.tabHead {
+  font-size: 14px;
+  font-weight: 550;
+  height: "68px";
+  /* width:"110px" , textTransform:"capitalize"  }}    */
+}
+.dcontent {
+  min-width: 300px;
+}
+.no-data {
+  text-align: center;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+.circular {
+  margin-left: 100px;
+}
+.circular-par {
+  height: 160px;
+  width: 380px;
+  text-align: center;
+  padding-top: 50px;
+}
+.doneb {
+  height: 27px;
+  font-size: 13px;
+  padding: 1px;
+  margin-right: 3px;
+}
+.cancelb {
+  height: 27px;
+  font-size: 13px;
+  padding: 1px;
+}
+.form-assign{
+    position:absolute; top:95px; left:20px;
+}
+.after-top{
+    height: 70px;
+}
+.top-grid{
+    width: 550px;
+}
+.innner-after {
+    height: 70px;
+}
+.btnAdd{
+    opacity: 0;
+}
+.grid-line{
+    height: 70px;
+}
+.zind{
+    z-index: 0;
+}
+.add-main{
+    position: relative;
+}
+.d-title{
+    font-size: 15px;
+    font-weight: 400;
+}
+.add-d-content{height:510px ; min-width:600px;}
+.add-d-box{
+    border-bottom: 1px;height:22px;
+}
+.add-tab-1{
+    font-size:14px;font-weight:550; height:70px ;width:180px ;
+         text-transform:capitalize;
+}
+.add-tab-2{
+    font-size:14px; font-weight:550 ; height:70px ; width:170px ; text-transform:capitalize;  
+}
+.add-t-list{
+    position:absolute;top:45px;left:14px;height:"50px";
+}   

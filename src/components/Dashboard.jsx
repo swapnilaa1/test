@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Dashboard = () => {
+const Dashboard = ({setSelectedTitle , selectedTitle}) => {
   const navigate = useNavigate();
   useEffect(() => {
+    setSelectedTitle("Dashboard")
     if (!localStorage.getItem("token")) {
-      navigate("/auth/login");
+      navigate("/login");
     }
   }, []);
   return <div>Dashboard</div>;

@@ -1,8 +1,59 @@
+
+.Time{
+    width: 300px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    margin-right: 125px;
+}
+
+.login-main{
+    display: grid;
+    grid-template-columns: repeat(2 , auto);
+}
+.item-grid{
+    width: 100%;
+}
+.sign-main{
+    position: relative;
+    
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    grid-template-rows: repeat(2,auto);
+    top: 100px;
+    right: 30px;
+}
+.error_div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 55px;
+    width: 450px;
+    color: white;
+    margin-bottom: 0px;
+    background-color: rgb(226, 77, 77);
+
+}
+.no_error{
+    height: 55px;
+    width: 450px;
+    margin-bottom: 0px;
+}
+.error_msg{
+    color: rgb(232, 46, 46);
+    font-size: 13px;
+    font-weight: 500px;
+}
+.invisible{
+    visibility: hidden;
+}
+
 .status-not-accepted{
     color: red;
 }
 .status-accepted{
-    color: yellow;
+    color: rgb(212, 158, 9);
 }
 .status-completed{
     color: green;
@@ -14,31 +65,39 @@
     color: rgb(53, 53, 192);
     cursor: pointer;
 }
-
-.login{
-    
+.login_containt{
     position: relative;
-    top: 300px;
-    padding: 0px 100px;
+    top: 170px;
+}
+.login{
+    position: relative;
+    top: 0px;
 }
 .logo-head{
-position:absolute ;
-margin: 14% 14% 0% 14%;
-font-weight: 700;
-font-size: larger;
-width: 340px;
-right: 0px;
-
-
-}
-
-.logo{
+    position: relative;
     text-align: center;
+    font-weight: 700;
+    font-size: larger;
+    width: 450px;
+}
+.login_buttons{
+    display: flex;
+    margin-top: 20px;
+    justify-content: space-between;
 }
 .signup{
-    text-align:right ;
-    margin-right:20px;
+    text-align: right;
+    margin-right: 20px;
     margin-top: 30px;
+
+}
+.signHead
+{    font-size: 15px;
+    color: #74788d;
+}
+.signlink
+{
+    color: #3d94fb;
 }
 .cell{
     margin:0px ;
@@ -48,34 +107,53 @@ right: 0px;
     font-weight: 700;
     font-size: 12px;
 }
+.tabs_nav{
+    padding-left: 5px;
+}
+
+.filter-div{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-left: 22px;
+}
 .filter-content{
-    margin-bottom: "15px";
+    margin-bottom: 15px;
 }
-buttonDiv2{
+.filter-content3{
+    margin-bottom: 15px;
+}
+.task_main_div{
+    
+    width: 99.4%;
+    position: relative;
+    left: 0.6%;
+    margin-top: 0px;
+    box-sizing: border-box;
+    background-color: white;
+   
+}
+.buttonDiv2{
     margin-right: 15px;
     display: flex;
     flex-direction: row-reverse;
     height: 5px;
     font-weight: 700;
 }
-.buttonDiv{
-    margin-right: 15px;
-    display: flex;
-    flex-direction: row-reverse;
-    height: 5px;
-    font-weight: 700;
-}
+
 .cancelButton{
     margin-left: 10px;
     font-weight:700;
 }
 .pagination{
+    position: relative;
+    right: 25px;
+    top:-20px;   
     display: flex;
     flex-direction:row-reverse ;
 }
 .item-page{
-    font-size: 15px;
-    /* margin-top: 9px; */
+    font-size: 13px;
     margin: 9px 21px 9px 9px;
 }
 .partial{
@@ -89,13 +167,16 @@ buttonDiv2{
     text-align: center;
     display: inline-block;
     border: 1px solid rgb(170 151 151 );
-    /* margin: 0px; */
     padding: 6px;
     border-radius: 3px;
     margin-right: 20px;
     font-size: 14px;
     margin-top: 15px;
     opacity: 0.8;
+    cursor: pointer;
+}
+.internal:hover{
+box-shadow: 0px 0px 5px 4px rgb(140, 140, 202);;
 }
 .completeModal{
     width: 400px;
@@ -103,7 +184,6 @@ buttonDiv2{
     margin-top: 31px;
     margin-top: 17px;
     font-size: 14px;
-
 }
 .complteTitle{
     margin-top: 5px;
@@ -120,6 +200,8 @@ buttonDiv2{
 }
 .int-border{
     border: 1px solid blue;
+    box-shadow: 0px 0px 5px 4px rgb(140, 140, 202);
+    cursor: pointer;
 }
 .searchIp{
     width: 252px;
@@ -128,3 +210,36 @@ buttonDiv2{
     right: 7px;
  
 }
+.filter-border{
+      border:1px solid;}
+.filter-mar{
+    margin: 15px; 
+}
+.filter-col{margin-bottom: 15px;}
+.filter-font{
+ font-size:10px;}
+.filter-date{
+     display: flex; flex-direction: row;}
+.error-font{
+    font-size: 10px; color: red; }
+.filter-submit{
+    height:27px;font-size:13px;padding:0px;
+}
+.filter-flex-nav{flex-grow: 1;}
+.button-filer{height:27px ;font-size:12px ;padding:1px ;font-weight:600;}
+.export-filter{
+height:27px;font-size:13px;padding:1px;
+}
+.filter-tab-panel{
+    position:relative;top:10px;
+}
+.task-table-container{
+        position: relative;
+        top: -33px;
+        left: -24px;
+        min-height: 500;
+        background-color: red;
+      
+}
+.icon-button-style{font-size: 12px;}
+.nav-menu{margin-bottom:30px}
