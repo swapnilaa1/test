@@ -148,7 +148,7 @@
   .outlet_main {
     display: block;
     /* flex-grow: -1; */
-    background-color: rgb(155, 155, 155, 0.2);
+    /* background-color: rgb(155, 155, 155, 0.2); */
   }
   .tabs_nav{
     width: 50%;

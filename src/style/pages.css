@@ -235,7 +235,7 @@ height:27px;font-size:13px;padding:1px;
         top: -33px;
         left: -24px;
         min-height: 500;
-        background-color: red;
+        /* background-color: red; */
       
 }
 .icon-button-style{font-size: 12px;}
@@ -330,7 +330,7 @@ height:27px;font-size:13px;padding:1px;
     left: 0.6%;
     margin-top: 0px;
     box-sizing: border-box;
-    background-color: white;
+    /* background-color: white; */
    
 }
 .task-table-container{
