@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 import "./Form.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { getStringDate } from "../../utility";
+import "./Form.css";
 const Date = ({ name, setFun, ...otherProps }) => {
   const [dv, setDv] = useState(null);
   const [isDateOpen, SetIsDateOpen] = useState(false);
@@ -41,17 +42,7 @@ const Date = ({ name, setFun, ...otherProps }) => {
   return (
     <div>
       {isDateOpen && (
-        <div
-          style={{
-            position: "absolute",
-            top: "-13px",
-            height: "20px",
-            width: "350px",
-            left: "300px",
-            opacity: 1,
-            zIndex: 100,
-          }}
-        >
+        <div className="isDateOpen">
           {isDateOpen && (
             <DatePicker
               {...configText}
@@ -65,18 +56,12 @@ const Date = ({ name, setFun, ...otherProps }) => {
       )}
 
       <TextField
-      required
+        className="isDateShow"
+        required
         placeholder=""
         onClick={handleClick}
         {...configText}
         min="2023-02-19"
-        style={{
-          position: "absolute",
-          top: "210px",
-          right: "1px",
-          width: "260px",
-          zIndex: 100,
-        }}
       />
     </div>
   );

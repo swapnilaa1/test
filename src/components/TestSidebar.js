@@ -20,7 +20,15 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { Avatar, Button, CircularProgress, Grid, Menu, MenuItem } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  CircularProgress,
+  Grid,
+  Menu,
+  MenuItem,
+  Popover,
+} from "@mui/material";
 import { toastobj } from "../utility/toastobj";
 import { toast } from "react-toastify";
 import DateTime from "./DateTime";
@@ -29,7 +37,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMyTasks } from "../redux/myTasksSlice";
 import { postGetTeams } from "../redux/postGetTeamsSlice";
 import { Stack } from "@mui/system";
-
 
 const drawerWidth = 240;
 
@@ -49,7 +56,7 @@ const closedMixin = (theme) => ({
   }),
   overflowX: "hidden",
   width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up("sm")]: {
+  [theme.breakpoints.up("lg")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
 });
@@ -146,13 +153,15 @@ const data = [
 export default function MiniDrawer({ setSelectedTitle, selectedTitle }) {
   const dispatch = useDispatch();
 
-  const { tasksLoading, sendData ,isListFetching , } = useSelector(
+  const { tasksLoading, sendData, isListFetching } = useSelector(
     (state) => state.mytasksReducer
   );
   const { isTeamLoading } = useSelector((state) => state.postTeamReducer);
   const navigate = useNavigate();
   const theme = useTheme();
   const [personAnchr, setPersonAnchr] = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open1 = Boolean(anchorEl);
   const isPersonOPen = Boolean(personAnchr);
 
   const [open, setOpen] = useState(false);
@@ -193,7 +202,7 @@ export default function MiniDrawer({ setSelectedTitle, selectedTitle }) {
   };
 
   const Person = (
-    <Menu anchorEl={personAnchr} id="person" keepMounted open={isPersonOPen}>
+    <Menu anchorEl={personAnchr} id="person" keepMounted={openPerson} open={isPersonOPen}>
       <MenuItem onClick={() => closePerson()}>Profile Photo</MenuItem>
       <MenuItem>Personal Info</MenuItem>
       <MenuItem>My Tasks</MenuItem>
@@ -201,30 +210,31 @@ export default function MiniDrawer({ setSelectedTitle, selectedTitle }) {
     </Menu>
   );
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const id = open1 ? "simple-popover" : undefined;
+
   React.useEffect(() => {
     if (!localStorage.getItem("token")) {
-       navigate("/login")
+      navigate("/login");
     }
   }, []);
 
   return (
-    <Box style={{}}>
-      <div
-        id="loader"
-        style={{
-          display: "none",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "20%",
-        }}
-      >
-        <div style={{}}>
+    <Box className="check">
+      <div id="loader" className="test_loader">
+        <div>
           <CircularProgress color="success" />
         </div>
       </div>
 
-      <div id="main_content" style={{ display: "flex" }}>
+      <div id="main_content" className="test_base_line">
         <CssBaseline />
         <AppBar position="fixed" open={open} color="info" className="appbar1">
           <Toolbar>
@@ -241,49 +251,73 @@ export default function MiniDrawer({ setSelectedTitle, selectedTitle }) {
             >
               <MenuIcon fontSize="small" />
             </IconButton>
-            <div style={{ flexGrow: "1" }}>
+            <div className="test_base_grow">
               <Typography
+                className="test_title"
                 variant="h6"
                 noWrap
                 component="div"
-                sx={{ fontSize: 17, fontWeight: 500 }}
               >
-                {selectedTitle}{" "}
-                <h4
-                  style={{
-                    display: "inline-block",
-                    marginLeft: "8px",
-                    opacity: "0.3",
-                    height: "fit-content",
-                  }}
-                >
-                  |
-                </h4>
+                {selectedTitle} <h4 className="title_line">|</h4>
               </Typography>
             </div>
             <div>
               <DateTime />
             </div>
             <Grid component="div" sx={resp}>
-              <div
-              className="Username"
-                color="primary"
-                onClick={openPerson}
-                
-              >
-                <Stack direction="row" spacing={1} sx={{mt:1 , ml:2}}>
-                <Avatar
-                  alt="Remy Sharp"
-                  src=""
-                  sx={{ width: 30, height: 30 }}
-                /><div style={{marginTop:"3px"}}>Swapnil Bhongale</div>
+              <div>
+              
+                {/* <Button
+                  aria-describedby={id}
+                  variant="contained"
+                  onClick={handleClick}
+                >
+                  Open Popover
+                </Button> */}
+                {/* <div  aria-describedby={id}  className="Username" color="primary" onClick={handleClick}>
+                <Stack direction="row" spacing={1} sx={{ mt: 1, ml: 2 }}>
+                  <Avatar
+                    className="avtar"
+                    alt="Semy Bharp"
+                    src=""
+                    sx={{ width: 30, height: 30 }}
+                  />
+                  <div className="avatar_name">Swapnil Bhongale</div>
                 </Stack>
-                
+              </div> */}
+              
                 
               </div>
+              <div aria-describedby={id} className="Username" color="primary" onClick={handleClick}>
+                <Stack direction="row" spacing={1} sx={{ mt: 1, ml: 2 }}>
+                  <Avatar
+                    className="avtar"
+                    alt="Semy Bharp"
+                    src=""
+                    sx={{ width: 30, height: 30 }}
+                  />
+                  <div className="avatar_name">Swapnil Bhongale</div>
+                </Stack>
+              </div>
+              <Popover
+                  id={id}
+                  open={open1}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                >
+                 
+              <Typography sx={{ p: 1 }}>Profile Photo</Typography>
+              <Typography sx={{ p: 1 }}>Personal Info</Typography>
+              <Typography sx={{ p: 1 }}>Settings</Typography>
+              <Typography sx={{ p: 1 }} onClick={handleSignOut}>Sign Out</Typography>
+                </Popover>
             </Grid>
             <Grid component="div" sx={mobres}>
-              <IconButton onClick={openPerson}>
+              <IconButton onClick={handleClick}>
                 <MoreVertIcon />
               </IconButton>
             </Grid>
@@ -292,11 +326,11 @@ export default function MiniDrawer({ setSelectedTitle, selectedTitle }) {
         <Drawer variant="permanent" open={open}>
           <DrawerHeader>
             {open && (
-              <div style={{ display: "flex" }}>
+              <div className="Drawer_header_div">
                 <img
+                  className="header_image_d"
                   height="20px"
                   src="https://testffc.nimapinfotech.com/image/New%20Images/FFC/FFC-logo.png"
-                  style={{ marginRight: "12px" }}
                 />
                 <Typography
                   sx={{ marginRight: "10px", fontSize: 12, fontWeight: "550" }}
@@ -328,6 +362,7 @@ export default function MiniDrawer({ setSelectedTitle, selectedTitle }) {
                   }}
                 >
                   <img
+                    className="list-item-src"
                     style={{
                       minWidth: "20px",
                       marginRight: open ? "15px" : "auto",

@@ -99,10 +99,7 @@
 {
     color: #3d94fb;
 }
-.cell{
-    margin:0px ;
-    font-size: 12px;
-}
+
 .filter-label{
     font-weight: 700;
     font-size: 12px;
@@ -243,3 +240,138 @@ height:27px;font-size:13px;padding:1px;
 }
 .icon-button-style{font-size: 12px;}
 .nav-menu{margin-bottom:30px}
+.login_text_div{
+    width: 450px;
+}
+.tasks_table_head_row{
+    /* background-color: aquamarine; */
+    display: block;
+}
+.table_row_body{
+/* background-color: #74788d; */
+}
+.tab_cell{
+/* background-color: aqua; */
+}
+.cell{
+    margin:0px ;
+    font-size: 12px;
+}
+@media screen and (min-width: 320px) and (max-width: 650px) {
+    .login-main{
+        display: flex;
+       /* // grid-template-columns: repeat(2 , auto); */
+       flex-direction: row;
+    }
+    .item-img{
+        display: none;
+        height: 30%;
+        width: 30%;
+    }
+    .item-grid{
+        margin-left: 10%;
+        padding-right: 0%;
+        width: 80%;
+    }
+    .sign-main{
+        
+        width: 380px;
+        top: 30px;
+        right: 65px;
+    }
+    .error_div{
+        
+        margin-left: 25px;
+        height: 55px;
+        width: 340px;
+        
+    }
+    .signup{
+        text-align: right;
+        margin-right: 0px;
+        margin-top: 20px;
+    
+    }
+    .signHead
+    {    font-size: 15px;
+        color: #74788d;
+    }
+    .signlink
+    {
+        color: #3d94fb;
+    }
+    .login_containt{
+        position: relative;
+        top: 170px;
+    }
+    .login{
+        position: relative;
+        top: 30px;
+    }
+    .logo-head{
+        position: relative;
+        text-align: center;
+        font-weight: 500;
+        font-size: 17px;
+        width: 360px;
+    }
+    .login_buttons{
+        display: flex;
+        margin-top: 25px;
+        margin-right: 7px;
+        justify-content: space-between;
+    }
+    .login_text_div{
+    width: 370px;
+}
+.task_main_div{
+    
+    width: 100%;
+    left: 0.6%;
+    margin-top: 0px;
+    box-sizing: border-box;
+    background-color: white;
+   
+}
+.task-table-container{
+    display: none;
+   /* width: 300px;
+    top: -33px;
+    left: -24px;
+    min-height: 500;
+    background-color: red; */
+  
+}
+.tasks_table_head_row{
+/* display: none; */
+/* visibility: hidden; */
+}
+.table_row_body{
+    /* background-color: #74788d; */
+    /* display: flex;
+    max-width: 30%;
+    height: 400px; */
+    }
+    
+    
+    .tab_cell{
+        /* display: none; */
+        /* width: 10px; */
+    }
+    .cell{
+     /* display: none; */
+    }      
+
+
+
+}
+
+@media screen and (min-width: 320px) and (max-width: 650px) {
+    
+
+
+}
+
+
+
+

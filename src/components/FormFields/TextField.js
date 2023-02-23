@@ -22,12 +22,13 @@ const TextField1 = ({ name, ...otherProps }) => {
   }
   return (
     <TextField
+    className="form_text"
     required
       {...configText}
-      style={{ position: "relative",bottom:"69px" , fontSize:"10px", fontWeight:"600"  }}
+    
     
       InputProps={{
-           endAdornment: <InputAdornment onClick={handleClick} position="end">{otherProps.value?.length!==0?<span style={{color:"red" , fontWeight:"520" , fontSize:"16px" , zIndex:98 , cursor:"pointer"}}>Remove</span>:""}</InputAdornment>,
+           endAdornment: <InputAdornment onClick={handleClick} position="end">{otherProps.value?.length!==0?<span className="end_props_loader" >Remove</span>:""}</InputAdornment>,
       }}
     />
   );

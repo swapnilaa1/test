@@ -125,7 +125,7 @@ const SignIn = () => {
     <>
       <div className="login-main">
         <div className="item-grid">
-          <img src="https://testffc.nimapinfotech.com/assets/media/login/login-page-slider3.jpg" />
+          <img className="item-img" src="https://testffc.nimapinfotech.com/assets/media/login/login-page-slider3.jpg" />
         </div>
         <div className="item-grid">
           <div className="signup">
@@ -145,7 +145,7 @@ const SignIn = () => {
 
               <div className="login">
                 <form onSubmit={handleSubmit}>
-                  <div style={{ width: "450px" }}>
+                  <div className="login_text_div" >
                     <TextField
                       fullWidth
                       label="Username"
@@ -162,7 +162,7 @@ const SignIn = () => {
                       ):<span className="invisible">hello</span>}
                     </div>
                   </div>
-                  <div style={{ width: "450px" }}>
+                  <div className="login_text_div" >
                     <TextField
                       fullWidth
                       label="Password"

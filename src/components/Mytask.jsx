@@ -517,7 +517,7 @@ const Mytask = ({setSelectedTitle , selectedTitle}) => {
     <div>
       <div className="task_main_div">
         <Grid
-        style={{width:"98%"}}
+        style={{width:"50%"}}
           component="div"
           className="navgrid"
         >

@@ -30,7 +30,7 @@ const TextInput = ({ name, ...otherProps }) => {
   }
   return (
     <div>
-      <TextField required {...configText} onChange={handleChange} style={{height:"45px" , marginTop:"0px"}} fullWidth />
+      <TextField className="form_text_input" required {...configText} onChange={handleChange}  fullWidth />
     </div>
   );
 };

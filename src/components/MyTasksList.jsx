@@ -206,7 +206,7 @@ const MyTasksList = () => {
       >
         <Table size="small" >
           <TableHead>
-            <TableRow>
+            <TableRow className="tasks_table_head_row">
               <TableCell align="left">
                 <span className="cell">Title</span>
               </TableCell>
@@ -294,24 +294,24 @@ const MyTasksList = () => {
           <TableBody>
             { !isListFetching ? localData?.length!==0 ? 
              localData?.map((data, index) => (
-              <TableRow>
-                <TableCell sx={{ maxWidth: 110 }}>
+              <TableRow className="table_row_body">
+                <TableCell sx={{ maxWidth: 110 }} className="tab_cell">
                   <span className="cell span-link">{data.Title}</span>
                 </TableCell>
-                <TableCell>
+                <TableCell className="tab_cell">
                   <span className="cell span-link">{data.LeadName}</span>
                 </TableCell>
-                <TableCell padding="none">
-                  <span className="cell" spacing={1000}>
+                <TableCell className="tab_cell" padding="none">
+                  <span className="cell" >
                     {data.AssignedByUserName}
                   </span>
                 </TableCell>
-                <TableCell>
+                <TableCell className="tab_cell">
                   <span className="cell">
                     {getDisplayDate(data.CreateDate, "display")}
                   </span>
                 </TableCell>
-                <TableCell>
+                <TableCell className="tab_cell">
                   <span className="cell">
                     {getDisplayDate(data.TaskEndDate, "display")}
                   </span>
@@ -325,11 +325,11 @@ const MyTasksList = () => {
                     </Tooltip>
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell className="tab_cell">
                   <span className="cell">{data.Priority}</span>
                 </TableCell>
 
-                <TableCell>
+                <TableCell className="tab_cell">
                   {data.TaskStatus > 0 && data.TaskStatus < 100 ? (
                     <span className="cell status-partial">
                       {`Partial Complete (${data.TaskStatus}%)`}{" "}
@@ -346,8 +346,8 @@ const MyTasksList = () => {
                     ""
                   )}
                 </TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
+                <TableCell className="tab_cell"></TableCell>
+                <TableCell className="tab_cell"></TableCell>
                 <TableCell
                   component="td"
                   className="cell"

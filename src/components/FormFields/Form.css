@@ -1,20 +1,66 @@
-.display{
-position:fixed ;
-bottom:20px;
+.display {
+  position: fixed;
+  bottom: 20px;
   z-index: 1;
- 
 }
 
-.display2{
-    z-index: 2;
+.display2 {
+  z-index: 2;
 }
 
-.list_div{
+.list_div {
   display: none;
   position: absolute;
   top: 0px;
-  background-color:white;
+  background-color: white;
   z-index: 1;
   height: 200px;
   overflow: hidden;
 }
+.isDateOpen {
+  position: absolute;
+  top: -13px;
+  height: 20px;
+  width: 350px;
+  left: 300px;
+  opacity: 1;
+  z-index: 100;
+}
+.isDateShow {
+  position: absolute;
+  top: 210px;
+  right: 1px;
+  width: 260px;
+  z-index: 100;
+}
+.form_file {
+  position: relative;
+  top: 0px;
+  z-index: 97;
+  opacity: 0;
+}
+.menu_priority {
+  position: absolute;
+  top: 279px;
+  width: 260px;
+}
+.form_text {
+  position: relative;
+  bottom: 69px;
+  font-size: 10px;
+  font-weight: 600;
+}
+.end_props_loader {
+  color: red;
+  font-weight: 520;
+  font-size: 16px;
+  z-index: 98;
+  cursor: pointer;
+}
+.form_text_input{
+  height:45px; margin-top:0px;
+}
+.form-select-user{
+position:absolute ; top:350px; height:60px ; z-index:0 ;
+}
+

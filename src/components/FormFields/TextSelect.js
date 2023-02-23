@@ -24,11 +24,11 @@ const TextSelect = ({ name, value, setFun, ...otherProps }) => {
   return (
     <div>
       <TextField
+      className="form-select-user"
    required
       InputProps={{
         readOnly: true,
       }}
-      style={{position:"absolute" , top:"350px", height:"60px" , zIndex:"0" }}
       {...configText}
       onChange={() => setFun()}
       onClick={() => otherProps.setOpenAddUser(true)}

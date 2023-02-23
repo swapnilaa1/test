@@ -56,15 +56,9 @@ const FileField = ({
           return (
             <div>
               <TextField
+              className="form_file"
               required
-                style={{
-                  position:"relative",
-                  top:"0px",
-                  zIndex: 97,
-                  opacity: "0",
-                }}
                 type="file"
-                className=""
                 fullWidth
                 variant="standard"
                 label="Attach File"

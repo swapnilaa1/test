@@ -21,8 +21,10 @@
 }
 .mui_button {
   margin-right: 20px;
-  margin-right:15px;
-  height:27px;font-size:13px;padding:1px;
+  margin-right: 15px;
+  height: 27px;
+  font-size: 13px;
+  padding: 1px;
 }
 .outlet_main {
   flex-grow: 1;
@@ -78,9 +80,80 @@
   font-size: 15px;
   padding: 5px;
 }
-.button-pad{
+.button-pad {
+}
+.btn-filter-content {
+  height: 27px;
+  font-size: 13px;
+  padding: 1px;
+  margin-right: 15px;
+}
+.test_loader {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20%;
+}
+.test_base_line {
+  display: flex;
+}
+.test_base_grow {
+  flex-grow: 1;
+}
+.test_title {
+  font-size: 17px;
+  font-weight: 500;
+}
+.title_line {
+  display: inline-block;
+  margin-left: 8px;
+  opacity: 0.3;
+  height: fit-content;
+}
+.avatar_name{
+  margin-top:3px;
+}
+.avtar{
+  width: 30px;
+  height: 30px;
+}
+.Drawer_header_div{
+  display: flex;
+}
+.header_image_d{
+   margin-right: 12px;
 
 }
-.btn-filter-content{
-  height:27px;font-size:13px;padding:1px;margin-right:15px;
+.beta_field{
+  margin-right: 10px;font-size: 12px; font-weight:550px;
 }
+.list-iten-src{
+
+}
+
+
+@media screen and (min-width: 320px) and (max-width: 650px) {
+
+  .appbar1 {
+    display: flex;
+  /* visibility: hidden;
+    display: none;
+   opacity: 0; */
+   width: 30%;
+  }
+  .check{
+    display: inline-block;
+  }
+  .outlet_main {
+    display: block;
+    /* flex-grow: -1; */
+    background-color: rgb(155, 155, 155, 0.2);
+  }
+  .tabs_nav{
+    width: 50%;
+  }
+
+
+}
+

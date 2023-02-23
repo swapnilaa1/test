@@ -30,8 +30,9 @@ const Priority = ({ name, setFun, control, ...otherProps }) => {
 
   const Menu = (
     <TextField
+    className="menu_priority"
     required
-    style={{ position:"absolute",top:"279px" , width:260 }}
+    
       select
       {...configText}
       size="small"
